@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9171771F-2BF8-48D7-9B1C-21CDD539C197}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{8C0AE270-3812-40EE-BA39-07FF6DF33FF0}"
+ProjectSection(SolutionItems) = preProject
+	readme.md = readme.md
+	.editorconfig = .editorconfig
+	.gitignore = .gitignore
+	Dockerfile = Dockerfile
+EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F133A796-AF2A-4422-A516-517B1A8A9A9B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{33CD7A38-93CF-4038-9F57-DF4A2692B4A1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{AED5D2C2-D11F-41F9-BB30-BBD0B2C2115B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MerchandiseService.API", "src\MerchandiseService.API\MerchandiseService.API.csproj", "{70EE4831-6AC0-406F-A813-085746BB368A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{70EE4831-6AC0-406F-A813-085746BB368A} = {9171771F-2BF8-48D7-9B1C-21CDD539C197}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70EE4831-6AC0-406F-A813-085746BB368A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70EE4831-6AC0-406F-A813-085746BB368A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70EE4831-6AC0-406F-A813-085746BB368A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70EE4831-6AC0-406F-A813-085746BB368A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
