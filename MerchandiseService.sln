@@ -10,11 +10,10 @@ ProjectSection(SolutionItems) = preProject
 	Dockerfile = Dockerfile
 EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F133A796-AF2A-4422-A516-517B1A8A9A9B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{33CD7A38-93CF-4038-9F57-DF4A2692B4A1}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{AED5D2C2-D11F-41F9-BB30-BBD0B2C2115B}"
+ProjectSection(SolutionItems) = preProject
+	deploy\docker-compose.yml = deploy\docker-compose.yml
+EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MerchandiseService.API", "src\MerchandiseService.API\MerchandiseService.API.csproj", "{70EE4831-6AC0-406F-A813-085746BB368A}"
 EndProject
