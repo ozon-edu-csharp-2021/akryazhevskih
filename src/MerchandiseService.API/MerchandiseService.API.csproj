@@ -5,8 +5,4 @@
         <RootNamespace>Merchandise.API</RootNamespace>
     </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-    </ItemGroup>
-
 </Project>
