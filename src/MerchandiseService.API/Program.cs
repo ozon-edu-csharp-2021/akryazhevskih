@@ -1,7 +1,8 @@
+using MerchandiseService.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Merchandise.API
+namespace MerchandiseService.API
 {
     public class Program
     {
@@ -12,6 +13,7 @@ namespace Merchandise.API
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
+                .AddInfrastructure();
     }
 }

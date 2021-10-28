@@ -1,0 +1,36 @@
+syntax = "proto3";
+option csharp_namespace = "MerchandiseService.Grpc";
+package MerchandiseService.API;
+
+service MerchApiGrpc {
+  rpc CreateMerchRequest (CreateMerchRequestModel) returns (MerchRequestModel);
+  rpc GetMerchRequestList (GetMerchRequestListModel) returns (MerchRequestListModel);
+}
+
+message CreateMerchRequestModel {
+  MerchType type = 1;
+  int64 employee_id = 2;
+}
+
+message MerchRequestModel {
+  string id = 1;
+  MerchType type = 2;
+  int64 employee_id = 3;
+}
+
+message GetMerchRequestListModel {
+  int64 employee_id = 1;
+}
+
+message MerchRequestListModel {
+  repeated MerchRequestModel items = 1;
+}
+
+enum MerchType {
+  NONE = 0;
+  WELCOME_PACK = 10;
+  CONFERENCE_LISTENER_PACK = 20;
+  CONFERENCE_SPEAKER_PACK = 30;
+  PROBATION_PERIOD_ENDING_PACK = 40;
+  VETERAN_PACK = 50;
+}
