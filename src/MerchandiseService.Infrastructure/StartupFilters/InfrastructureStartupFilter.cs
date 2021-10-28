@@ -11,7 +11,10 @@ namespace MerchandiseService.Infrastructure.StartupFilters
         {
             return app =>
             {
-                app.UseMiddleware<LoggingMiddleware>();
+                app.UseWhen(context => context.Request.ContentType != "application/grpc", builder =>
+                {
+                    builder.UseMiddleware<LoggingMiddleware>();
+                });
                 
                 app.Map("/version", builder => builder.UseMiddleware<VersionMiddleware>());
                 app.Map("/ready", builder => builder.UseMiddleware<ReadyMiddleware>());

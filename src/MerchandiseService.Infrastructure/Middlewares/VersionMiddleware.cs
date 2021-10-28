@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Net.Mime;
+using System.Reflection;
 using System.Threading.Tasks;
 using MerchandiseService.Infrastructure.Models;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +22,8 @@ namespace MerchandiseService.Infrastructure.Middlewares
                 Version = assembly.Version?.ToString() ?? "-",
                 ServiceName = assembly.Name
             };
+            
+            context.Response.ContentType = MediaTypeNames.Application.Json;
             
             await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
         }

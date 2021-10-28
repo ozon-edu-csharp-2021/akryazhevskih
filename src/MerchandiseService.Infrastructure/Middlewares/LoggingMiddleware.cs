@@ -21,24 +21,18 @@ namespace MerchandiseService.Infrastructure.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            await LogRequest(context);
+            LogRequest(context);
             
             await _next(context);
             
-            await LogResponse(context);
+            LogResponse(context);
         }
-        private async Task LogRequest(HttpContext context)
+        private void LogRequest(HttpContext context)
         {
             try
             {
                 var request = context.Request;
-
-                if (!HttpProtocol.IsHttp10(request.Protocol) &&
-                    !HttpProtocol.IsHttp11(request.Protocol))
-                {
-                    return;
-                }
-
+                
                 var model = new LoggingModel
                 {
                     Route = request.Path + request.QueryString,
@@ -52,18 +46,12 @@ namespace MerchandiseService.Infrastructure.Middlewares
                 _logger.LogError(e, "Could not log request");
             }
         }
-        private async Task LogResponse(HttpContext context)
+        private void LogResponse(HttpContext context)
         {
             try
             {
                 var request = context.Request;
                 var response = context.Response;
-
-                if (!HttpProtocol.IsHttp10(request.Protocol) &&
-                    !HttpProtocol.IsHttp11(request.Protocol))
-                {
-                    return;
-                }
                 
                 var model = new LoggingModel
                 {
