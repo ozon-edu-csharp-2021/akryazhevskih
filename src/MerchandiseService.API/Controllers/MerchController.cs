@@ -17,12 +17,12 @@ namespace MerchandiseService.API.Controllers
         /// Запрос на выдачу мерча 
         /// </summary>
         [HttpPost]
-        [ProducesResponseType(typeof(MerchRequest), StatusCodes.Status200OK)]
-        public async Task<ActionResult<MerchRequest>> CreateMerchRequest(
-            CreateMerchRequestModel request,
+        [ProducesResponseType(typeof(Merch), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Merch>> RequestMerch(
+            MerchRequest request,
             CancellationToken token)
         {
-            var result = new MerchRequest
+            var result = new Merch
             {
                 Id = Guid.NewGuid(),
                 Type = request.Type,
@@ -36,14 +36,14 @@ namespace MerchandiseService.API.Controllers
         /// Получение информации о выданом мерче
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(List<MerchRequest>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<MerchRequest>>> GetMerchRequestList(
+        [ProducesResponseType(typeof(List<Merch>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<Merch>>> GetMerchList(
             [FromQuery] long employeeId,
             CancellationToken token)
         {
-            var result = new List<MerchRequest>
+            var result = new List<Merch>
             {
-                new MerchRequest
+                new Merch
                 {
                     Id = Guid.NewGuid(),
                     Type = MerchType.VeteranPack,

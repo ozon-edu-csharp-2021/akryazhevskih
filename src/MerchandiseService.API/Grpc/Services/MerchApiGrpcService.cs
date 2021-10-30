@@ -10,15 +10,18 @@ namespace MerchandiseService.API.Grpc.Services
         /// <summary>
         /// Запрос на выдачу мерча 
         /// </summary>
-        public override Task<MerchRequestModel> CreateMerchRequest(
-            CreateMerchRequestModel request,
+        public override Task<MerchResponse> RequestMerch(
+            MerchRequest request,
             ServerCallContext context)
         {
-            var result = new MerchRequestModel
+            var result = new MerchResponse
             {
-                Id = Guid.NewGuid().ToString(),
-                Type = request.Type,
-                EmployeeId = request.EmployeeId
+                Merch = new Merch
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Type = request.Type,
+                    EmployeeId = request.EmployeeId
+                }
             };
 
             return Task.FromResult(result);
@@ -27,15 +30,15 @@ namespace MerchandiseService.API.Grpc.Services
         /// <summary>
         /// Получение информации о выданом мерче
         /// </summary>
-        public override Task<MerchRequestListModel> GetMerchRequestList(
-            GetMerchRequestListModel request,
+        public override Task<GetMerchListResponse> GetMerchList(
+            GetMerchListRequest request,
             ServerCallContext context)
         {
-            var result = new MerchRequestListModel
+            var result = new GetMerchListResponse
             {
                 Items =
                 {
-                    new MerchRequestModel
+                    new Merch
                     {
                         Id = Guid.NewGuid().ToString(),
                         Type = MerchType.VeteranPack,

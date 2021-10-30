@@ -3,12 +3,12 @@
 namespace MerchandiseService.HttpModels
 {
     /// <summary>
-    /// Запрос на выдачу мерча 
+    /// Мерч
     /// </summary>
-    public class MerchRequest
+    public class Merch
     {
         /// <summary>
-        /// Уникальный идентификатор запроса
+        /// Уникальный идентификатор мерча
         /// </summary>
         public Guid Id { get; set; }
         

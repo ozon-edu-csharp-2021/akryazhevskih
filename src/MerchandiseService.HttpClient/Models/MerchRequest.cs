@@ -2,7 +2,7 @@
 
 namespace MerchandiseService.HttpClient.Models
 {
-    public class CreateMerchRequestModel
+    public class MerchRequest
     {
         /// <summary>
         /// Тип мерча

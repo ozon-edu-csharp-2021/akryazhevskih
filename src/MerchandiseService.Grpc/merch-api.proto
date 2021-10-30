@@ -3,34 +3,38 @@ option csharp_namespace = "MerchandiseService.Grpc";
 package MerchandiseService.API;
 
 service MerchApiGrpc {
-  rpc CreateMerchRequest (CreateMerchRequestModel) returns (MerchRequestModel);
-  rpc GetMerchRequestList (GetMerchRequestListModel) returns (MerchRequestListModel);
+  rpc RequestMerch (MerchRequest) returns (MerchResponse);
+  rpc GetMerchList (GetMerchListRequest) returns (GetMerchListResponse);
 }
 
-message CreateMerchRequestModel {
+message MerchRequest {
   MerchType type = 1;
   int64 employee_id = 2;
 }
 
-message MerchRequestModel {
+message MerchResponse {
+  Merch merch = 1;
+}
+
+message GetMerchListRequest {
+  int64 employee_id = 1;
+}
+
+message GetMerchListResponse {
+  repeated Merch items = 1;
+}
+
+message Merch {
   string id = 1;
   MerchType type = 2;
   int64 employee_id = 3;
 }
 
-message GetMerchRequestListModel {
-  int64 employee_id = 1;
-}
-
-message MerchRequestListModel {
-  repeated MerchRequestModel items = 1;
-}
-
 enum MerchType {
-  NONE = 0;
-  WELCOME_PACK = 10;
-  CONFERENCE_LISTENER_PACK = 20;
-  CONFERENCE_SPEAKER_PACK = 30;
-  PROBATION_PERIOD_ENDING_PACK = 40;
-  VETERAN_PACK = 50;
+  MERCH_TYPE_UNSPECIFIED = 0;
+  MERCH_TYPE_WELCOME_PACK = 1;
+  MERCH_TYPE_CONFERENCE_LISTENER_PACK = 2;
+  MERCH_TYPE_CONFERENCE_SPEAKER_PACK = 3;
+  MERCH_TYPE_PROBATION_PERIOD_ENDING_PACK = 4;
+  MERCH_TYPE_VETERAN_PACK = 5;
 }

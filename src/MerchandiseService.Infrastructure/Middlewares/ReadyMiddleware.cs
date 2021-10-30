@@ -9,11 +9,12 @@ namespace MerchandiseService.Infrastructure.Middlewares
         {
         }
 
-        public Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             context.Response.StatusCode = StatusCodes.Status200OK;
-
-            return Task.CompletedTask;
+            
+            await context.Response.WriteAsync("200 Ok");
+            
         }
     }
 }
