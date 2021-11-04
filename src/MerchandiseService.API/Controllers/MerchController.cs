@@ -1,9 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 using MerchandiseService.API.Models;
+using MerchandiseService.Domain.Exceptions.MerchAggregate;
 using MerchandiseService.HttpModels;
+using MerchandiseService.Infrastructure.Commands.CreateMerch;
+using MerchandiseService.Infrastructure.Commands.GetMerch;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +17,13 @@ namespace MerchandiseService.API.Controllers
     [Route("v1/api/merch")]
     public class MerchController : ControllerBase
     {
+        private readonly IMediator _mediator;
+
+        public MerchController(
+            IMediator mediator)
+        {
+            _mediator = mediator;
+        }
         /// <summary>
         /// Запрос на выдачу мерча 
         /// </summary>
@@ -22,35 +33,81 @@ namespace MerchandiseService.API.Controllers
             MerchRequest request,
             CancellationToken token)
         {
-            var result = new Merch
+            var createMerchCommand = new CreateMerchCommand
             {
-                Id = Guid.NewGuid(),
-                Type = request.Type,
-                EmployeeId = request.EmployeeId
+                MerchType = request.Type,
+                EmployeeId = request.EmployeeId,
+                Size = request.Size,
+                Email = request.Email
             };
 
-            return Ok(result);
+            try
+            {
+                var merch = await _mediator.Send(createMerchCommand, token);
+
+                var result = new Merch
+                {
+                    Id = merch.Id.Value,
+                    Type = (MerchType)merch.Type.Id,
+                    Status = (MerchStatus)merch.Status.Id,
+                    EmployeeId = merch.Employee.Id.Value,
+                    CreateAt = merch.CreatedAt,
+                    IssuedAt = merch.IssuedAt,
+                    Items = merch.Items.Select(x => new HttpModels.MerchItem
+                    {
+                        Sku = x.Sku.Code,
+                        Name = x.Sku.Name,
+                        Quantity = x.Quantity.Value,
+                        Size = x.Size is null ? null : (Size)x.Size.Id
+                    })
+                };
+
+                return Ok(result);
+            }
+            catch (MerchAlreadyExistException _)
+            {
+                return Conflict();
+            }
         }
         
         /// <summary>
-        /// Получение информации о выданом мерче
+        /// Получение информации о мерче
         /// </summary>
-        [HttpGet]
-        [ProducesResponseType(typeof(List<Merch>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<Merch>>> GetMerchList(
-            [FromQuery] long employeeId,
+        [HttpGet("{merchId}")]
+        [ProducesResponseType(typeof(Merch), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Merch>> GetMerch(
+            long merchId,
             CancellationToken token)
         {
-            var result = new List<Merch>
+            var getMerchCommand = new GetMerchCommand
             {
-                new Merch
-                {
-                    Id = Guid.NewGuid(),
-                    Type = MerchType.VeteranPack,
-                    EmployeeId = employeeId
-                }
+                MerchId = merchId
             };
+            
+            var merch = await _mediator.Send(getMerchCommand, token);
 
+            if (merch is null)
+            {
+                return NotFound();
+            }
+            
+            var result = new Merch
+            {
+                Id = merch.Id.Value,
+                Type = (MerchType)merch.Type.Id,
+                Status = (MerchStatus)merch.Status.Id,
+                EmployeeId = merch.Employee.Id.Value,
+                CreateAt = merch.CreatedAt,
+                IssuedAt = merch.IssuedAt,
+                Items = merch.Items.Select(x => new HttpModels.MerchItem
+                {
+                    Sku = x.Sku.Code,
+                    Name = x.Sku.Name,
+                    Quantity = x.Quantity.Value,
+                    Size = x.Size is null ? null : (Size)x.Size.Id
+                })
+            };
+            
             return Ok(result);
         }
     }
