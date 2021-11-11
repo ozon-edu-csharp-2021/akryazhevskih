@@ -6,11 +6,13 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
 {
     public class MerchPackItem : Entity
     {
+        /// <summary>
+        /// Товар
+        /// </summary>
         public MerchPackItem(
             Sku sku,
             Quantity quantity,
-            Size size = null
-        )
+            Size size = null)
         {
             if (sku is null)
             {
@@ -28,7 +30,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
         }
         
         /// <summary>
-        /// Артикул
+        /// Товарная позиция
         /// </summary>
         public Sku Sku { get; }
         

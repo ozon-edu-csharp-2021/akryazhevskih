@@ -6,14 +6,9 @@
     public class MerchItem
     {
         /// <summary>
-        /// Артикул
+        /// Товарная позиция
         /// </summary>
         public long Sku { get; set; }
-        
-        /// <summary>
-        /// Наименование 
-        /// </summary>
-        public string Name { get; set; }
         
         /// <summary>
         /// Количество 

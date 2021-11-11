@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using MerchandiseService.Domain.AggregationModels.ValueObjects;
+﻿using MerchandiseService.Domain.AggregationModels.ValueObjects;
 using MerchandiseService.Domain.Exceptions.EmployeeAggregate;
 using MerchandiseService.Domain.Models;
 
@@ -8,17 +7,16 @@ namespace MerchandiseService.Domain.AggregationModels.EmployeeAggregate
     /// <summary>
     /// Сотрудник
     /// </summary>
-    public class Employee : ValueObject
+    public class Employee : Entity
     {
         public Employee(
-            Identifier id,
+            long id,
             Size size,
-            Email email
-        )
+            Email email)
         {
-            if (id is null)
+            if (id <= 0)
             {
-                throw new EmployeeException("ID cannot be null");
+                throw new EmployeeException("ID cannot be less than 1");
             }
             
             if (size is null)
@@ -31,15 +29,10 @@ namespace MerchandiseService.Domain.AggregationModels.EmployeeAggregate
                 throw new EmployeeException("Email cannot be null");
             }
             
-            Id = id;
             Size = size;
             Email = email;
+            SetId(id);
         }
-        
-        /// <summary>
-        /// ID
-        /// </summary>
-        public Identifier Id { get; private set; } 
         
         /// <summary>
         /// Размер
@@ -50,12 +43,10 @@ namespace MerchandiseService.Domain.AggregationModels.EmployeeAggregate
         /// Email
         /// </summary>
         public Email Email { get; }
-        
-        protected override IEnumerable<object> GetEqualityComponents()
+
+        protected void SetId(long id)
         {
-            yield return Id;
-            yield return Size;
-            yield return Email;
+            Id = id;
         }
     }
 }

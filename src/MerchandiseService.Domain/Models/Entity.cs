@@ -7,7 +7,7 @@ namespace MerchandiseService.Domain.Models
     public class Entity
     {
         int? _requestedHashCode;
-        public virtual int Id { get; protected set; }
+        public virtual long Id { get; protected set; }
 
         private List<INotification> _domainEvents;
         public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();
@@ -30,7 +30,7 @@ namespace MerchandiseService.Domain.Models
 
         public bool IsTransient()
         {
-            return this.Id == default(Int32);
+            return this.Id == default(Int64);
         }
 
         public override bool Equals(object obj)

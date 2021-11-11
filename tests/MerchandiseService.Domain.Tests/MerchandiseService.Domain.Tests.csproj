@@ -19,6 +19,7 @@
     
     <ItemGroup>
       <ProjectReference Include="..\..\src\MerchandiseService.Domain\MerchandiseService.Domain.csproj" />
+      <ProjectReference Include="..\..\src\MerchandiseService.Infrastructure\MerchandiseService.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

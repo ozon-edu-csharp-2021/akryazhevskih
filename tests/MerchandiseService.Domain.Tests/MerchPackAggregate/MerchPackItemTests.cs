@@ -11,7 +11,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
         public void CreateMerchPackItem()
         {
             //Arrange
-            var sku = new Sku(123456, "Socks");
+            var sku = new Sku(123456);
             var quantity = new Quantity(10);
             var size = Size.XL;
 
@@ -28,7 +28,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
         public void CreateMerchPackItemWithoutSize()
         {
             //Arrange
-            var sku = new Sku(123456, "Socks");
+            var sku = new Sku(123456);
             var quantity = new Quantity(10);
 
             //Act
@@ -44,7 +44,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
         public void CreateMerchPackItemWithNullSize()
         {
             //Arrange
-            var sku = new Sku(123456, "Socks");
+            var sku = new Sku(123456);
             var quantity = new Quantity(10);
             Size size = null;
 
@@ -75,7 +75,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
         public void CreateMerchPackItemWithNullQuantity()
         {
             //Arrange
-            var sku = new Sku(123456, "Socks");
+            var sku = new Sku(123456);
             Quantity quantity = null;
             var size = Size.XL;
 

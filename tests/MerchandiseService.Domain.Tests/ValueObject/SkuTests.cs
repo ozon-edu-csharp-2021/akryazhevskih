@@ -12,40 +12,12 @@ namespace MerchandiseService.Domain.Tests.ValueObject
         {
             //Arrange
             var code = 999;
-            var name = "Socks";
 
             //Act
-            var result = new Sku(code, name);
+            var result = new Sku(code);
 
             //Assert
             Assert.Equal(code, result.Code);
-            Assert.Equal(name, result.Name);
-        }
-        
-        [Fact]
-        public void CreateSkuWithEmptyName()
-        {
-            //Arrange
-            var code = 999;
-            var name = string.Empty;
-
-            //Act
-
-            //Assert
-            Assert.Throws<SkuException>(() => new Sku(code, name));
-        }
-        
-        [Fact]
-        public void CreateSkuWithNullName()
-        {
-            //Arrange
-            var code = 999;
-            string name = null;
-
-            //Act
-
-            //Assert
-            Assert.Throws<SkuException>(() => new Sku(code, name));
         }
         
         [Fact]
@@ -53,12 +25,11 @@ namespace MerchandiseService.Domain.Tests.ValueObject
         {
             //Arrange
             var code = 0;
-            var name = "Socks";
 
             //Act
 
             //Assert
-            Assert.Throws<SkuException>(() => new Sku(code, name));
+            Assert.Throws<SkuException>(() => new Sku(code));
         }
         
         [Fact]
@@ -66,12 +37,11 @@ namespace MerchandiseService.Domain.Tests.ValueObject
         {
             //Arrange
             var code = -999;
-            var name = "Socks";
 
             //Act
 
             //Assert
-            Assert.Throws<SkuException>(() => new Sku(code, name));
+            Assert.Throws<SkuException>(() => new Sku(code));
         }
     }
 }

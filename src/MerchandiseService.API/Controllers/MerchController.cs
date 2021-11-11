@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using MerchandiseService.API.Models;
 using MerchandiseService.Domain.Exceptions.MerchAggregate;
+using MerchandiseService.Domain.Exceptions.MerchPackAggregate;
 using MerchandiseService.HttpModels;
 using MerchandiseService.Infrastructure.Commands.CreateMerch;
 using MerchandiseService.Infrastructure.Commands.GetMerch;
@@ -24,6 +24,7 @@ namespace MerchandiseService.API.Controllers
         {
             _mediator = mediator;
         }
+        
         /// <summary>
         /// Запрос на выдачу мерча 
         /// </summary>
@@ -47,18 +48,17 @@ namespace MerchandiseService.API.Controllers
 
                 var result = new Merch
                 {
-                    Id = merch.Id.Value,
-                    Type = (MerchType)merch.Type.Id,
-                    Status = (MerchStatus)merch.Status.Id,
-                    EmployeeId = merch.Employee.Id.Value,
+                    Id = merch.Id,
+                    Type = (MerchType) merch.Type.Id,
+                    Status = (MerchStatus) merch.Status.Id,
+                    EmployeeId = merch.Employee.Id,
                     CreateAt = merch.CreatedAt,
                     IssuedAt = merch.IssuedAt,
-                    Items = merch.Items.Select(x => new HttpModels.MerchItem
+                    Items = merch.GetMerchItems().Select(x => new MerchItem
                     {
                         Sku = x.Sku.Code,
-                        Name = x.Sku.Name,
                         Quantity = x.Quantity.Value,
-                        Size = x.Size is null ? null : (Size)x.Size.Id
+                        Size = x.Size is null ? null : (Size) x.Size.Id
                     })
                 };
 
@@ -67,6 +67,10 @@ namespace MerchandiseService.API.Controllers
             catch (MerchAlreadyExistException _)
             {
                 return Conflict();
+            }
+            catch (MerchPackNullException _)
+            {
+                return NotFound();
             }
         }
         
@@ -93,16 +97,15 @@ namespace MerchandiseService.API.Controllers
             
             var result = new Merch
             {
-                Id = merch.Id.Value,
+                Id = merch.Id,
                 Type = (MerchType)merch.Type.Id,
                 Status = (MerchStatus)merch.Status.Id,
-                EmployeeId = merch.Employee.Id.Value,
+                EmployeeId = merch.Employee.Id,
                 CreateAt = merch.CreatedAt,
                 IssuedAt = merch.IssuedAt,
-                Items = merch.Items.Select(x => new HttpModels.MerchItem
+                Items = merch.GetMerchItems().Select(x => new MerchItem
                 {
                     Sku = x.Sku.Code,
-                    Name = x.Sku.Name,
                     Quantity = x.Quantity.Value,
                     Size = x.Size is null ? null : (Size)x.Size.Id
                 })

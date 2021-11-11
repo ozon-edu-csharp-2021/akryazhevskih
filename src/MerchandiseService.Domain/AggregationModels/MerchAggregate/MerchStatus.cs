@@ -18,13 +18,18 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
         public static MerchStatus New = new(1, nameof(New));
         
         /// <summary>
+        /// В работе
+        /// </summary>
+        public static MerchStatus InWork = new(2, nameof(InWork));
+        
+        /// <summary>
         /// Ждет поставки
         /// </summary>
-        public static MerchStatus SupplyAwaits = new(2, nameof(SupplyAwaits));
+        public static MerchStatus SupplyAwaits = new(3, nameof(SupplyAwaits));
         
         /// <summary>
         /// Выдан
         /// </summary>
-        public static MerchStatus Done = new(3, nameof(Done));
+        public static MerchStatus Done = new(4, nameof(Done));
     }
 }

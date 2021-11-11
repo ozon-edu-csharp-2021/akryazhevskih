@@ -1,3 +1,4 @@
+using System.Reflection;
 using MerchandiseService.API.Grpc.Services;
 using MerchandiseService.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;

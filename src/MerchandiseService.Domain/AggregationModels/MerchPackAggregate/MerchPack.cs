@@ -7,6 +7,9 @@ using MerchandiseService.Domain.Models;
 
 namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
 {
+    /// <summary>
+    /// Набор товаров
+    /// </summary>
     public class MerchPack : ValueObject
     {
         public MerchPack(
@@ -30,7 +33,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
         }
         
         /// <summary>
-        /// Набор товаров
+        /// Тип набора
         /// </summary>
         public MerchType Type  { get; }
         
@@ -42,7 +45,12 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
         /// <summary>
         /// Список товаров
         /// </summary>
-        public List<MerchPackItem> Items { get; }
+        private List<MerchPackItem> Items { get; }
+
+        public List<MerchPackItem> GetMerchPackItems()
+        {
+            return new List<MerchPackItem>(Items);
+        }
         
         protected override IEnumerable<object> GetEqualityComponents()
         {

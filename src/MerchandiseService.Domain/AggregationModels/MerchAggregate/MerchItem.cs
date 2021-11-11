@@ -11,18 +11,10 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
     public class MerchItem : Entity
     {
         public MerchItem(
-            Identifier merchId,
             Sku sku,
             Quantity quantity,
-            Quantity issuedQuantity,
-            Size size = null
-        )
+            Size size = null)
         {
-            if (merchId is null)
-            {
-                throw new MerchItemException("ID cannot be null");
-            }
-            
             if (sku is null)
             {
                 throw new MerchItemException("Sku cannot be null");
@@ -32,38 +24,26 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
             {
                 throw new MerchItemException("Quantity cannot be null");
             }
-            
-            if (issuedQuantity is null)
-            {
-                throw new MerchItemException("Issued quantity cannot be null");
-            }
-            
-            MerchId = merchId;
+
             Sku = sku;
             Quantity = quantity;
-            IssuedQuantity = issuedQuantity;
             Size = size;
         }
         
         /// <summary>
-        /// Мерч ID
-        /// </summary>
-        public new Identifier MerchId { get; private set; } 
-        
-        /// <summary>
-        /// Артикул
+        /// Товарная позиция
         /// </summary>
         public Sku Sku { get; }
         
         /// <summary>
         /// Количество
         /// </summary>
-        public Quantity Quantity { get; private set; }
+        public Quantity Quantity { get; protected set; }
         
         /// <summary>
         /// Количество
         /// </summary>
-        public Quantity IssuedQuantity { get; private set; }
+        public Quantity IssuedQuantity { get; protected set; }
         
         /// <summary>
         /// Размер
@@ -73,8 +53,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
         /// <summary>
         /// Статус
         /// </summary>
-        public MerchItemStatus Status =>
-            Quantity.Equals(IssuedQuantity) ? MerchItemStatus.Done : MerchItemStatus.SupplyAwaits;
+        public MerchItemStatus Status => Quantity.Equals(IssuedQuantity) ? MerchItemStatus.Done : MerchItemStatus.Awaits;
 
         public void SetQuantity(Quantity quantity)
         {
@@ -97,9 +76,9 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
                 throw new QuantityException("Issued quantity cannot be null");
             }
             
-            if (quantity.Value < 0)
+            if (quantity.Value <= 0)
             {
-                throw new QuantityException("Issued quantity cannot be less than 0");
+                throw new QuantityException("Issued quantity cannot be less than or equal to 0");
             }
             
             if (quantity.Value > Quantity.Value)

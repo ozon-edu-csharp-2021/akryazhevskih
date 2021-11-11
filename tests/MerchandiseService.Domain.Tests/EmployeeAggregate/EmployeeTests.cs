@@ -11,7 +11,7 @@ namespace MerchandiseService.Domain.Tests.EmployeeAggregate
         public void CreateEmployee()
         {
             //Arrange
-            var id = new Identifier(999);
+            var id = 999;
             var size = Size.XL;
             var email = new Email("test999@test.ru");
 
@@ -25,10 +25,24 @@ namespace MerchandiseService.Domain.Tests.EmployeeAggregate
         }
         
         [Fact]
-        public void CreateEmployeeWithNullId()
+        public void CreateEmployeeWithZeroId()
         {
             //Arrange
-            Identifier id = null;
+            long id = 0;
+            var size = Size.XL;
+            var email = new Email("test999@test.ru");
+
+            //Act
+
+            //Assert
+            Assert.Throws<EmployeeException>(() => new Employee(id, size, email));
+        }
+        
+        [Fact]
+        public void CreateEmployeeWithBelowZeroId()
+        {
+            //Arrange
+            long id = -999;
             var size = Size.XL;
             var email = new Email("test999@test.ru");
 
@@ -42,7 +56,7 @@ namespace MerchandiseService.Domain.Tests.EmployeeAggregate
         public void CreateEmployeeWithNullSize()
         {
             //Arrange
-            var id = new Identifier(999);
+            var id = 999;
             Size size = null;
             var email = new Email("test999@test.ru");
 
@@ -56,7 +70,7 @@ namespace MerchandiseService.Domain.Tests.EmployeeAggregate
         public void CreateEmployeeWithNullEmail()
         {
             //Arrange
-            var id = new Identifier(999);
+            var id = 999;
             var size = Size.XL;
             Email email = null;
 

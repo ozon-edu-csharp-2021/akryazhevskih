@@ -1,6 +1,6 @@
-﻿namespace MerchandiseService.Infrastructure.GrpcClients.StockApi
+﻿namespace MerchandiseService.Infrastructure.Services
 {
-    public class StockApiMerchItem
+    public class StockItem
     {
         public long Sku { get; set; }
         

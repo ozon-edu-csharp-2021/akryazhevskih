@@ -17,7 +17,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
             var items = new List<MerchPackItem>
             {
                 new MerchPackItem(
-                    new Sku(123456, "Socks"),
+                    new Sku(123456),
                     new Quantity(10),
                     Size.XL)
             };
@@ -28,7 +28,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
 
             //Assert
             Assert.Equal(type, result.Type);
-            Assert.Equal(items, result.Items);
+            Assert.Equal(items, result.GetMerchPackItems());
             Assert.Equal(size, result.Size);
         }
         
@@ -40,7 +40,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
             var items = new List<MerchPackItem>
             {
                 new MerchPackItem(
-                    new Sku(123456, "Socks"),
+                    new Sku(123456),
                     new Quantity(10),
                     Size.XL)
             };
@@ -50,7 +50,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
 
             //Assert
             Assert.Equal(type, result.Type);
-            Assert.Equal(items, result.Items);
+            Assert.Equal(items, result.GetMerchPackItems());
             Assert.Null(result.Size);
         }
         
@@ -62,7 +62,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
             var items = new List<MerchPackItem>
             {
                 new MerchPackItem(
-                    new Sku(123456, "Socks"),
+                    new Sku(123456),
                     new Quantity(10),
                     Size.XL)
             };
@@ -73,7 +73,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
 
             //Assert
             Assert.Equal(type, result.Type);
-            Assert.Equal(items, result.Items);
+            Assert.Equal(items, result.GetMerchPackItems());
             Assert.Equal(size, result.Size);
         }
         
@@ -85,7 +85,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
             var items = new List<MerchPackItem>
             {
                 new MerchPackItem(
-                    new Sku(123456, "Socks"),
+                    new Sku(123456),
                     new Quantity(10),
                     Size.XL)
             };

@@ -3,6 +3,8 @@
     public enum MerchStatus
     {
         New = 1,
-        Done = 2
+        InWork = 2,
+        SupplyAwaits = 3,
+        Done = 4
     }
 }

@@ -1,15 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MerchandiseService.Domain.AggregationModels.MerchAggregate;
 using MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using MerchandiseService.Domain.AggregationModels.ValueObjects;
+using MerchandiseService.Domain.Contracts;
 
 namespace MerchandiseService.Infrastructure.Repositories.MerchPackRepository
 {
     public class MerchPackRepository : IMerchPackRepository
     {
+        private IUnitOfWork _context;
+
+        public MerchPackRepository(IUnitOfWork context)
+        {
+            _context = context ?? throw new ArgumentNullException(nameof(context), "Cannot be null");
+        }
+        
+        public IUnitOfWork UnitOfWork => _context;
+        
         public Task<MerchPack> CreateAsync(MerchPack itemToCreate, CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
@@ -25,11 +36,11 @@ namespace MerchandiseService.Infrastructure.Repositories.MerchPackRepository
             var itemsXL = new List<MerchPackItem>
             {
                 new MerchPackItem(
-                    new Sku(123456, "Socks"),
+                    new Sku(123456),
                     new Quantity(6),
                     Size.XL),
                 new MerchPackItem(
-                    new Sku(654321, "T-Shirt"),
+                    new Sku(654321),
                     new Quantity(1),
                     Size.XL)
             };
@@ -37,11 +48,11 @@ namespace MerchandiseService.Infrastructure.Repositories.MerchPackRepository
             var itemsL = new List<MerchPackItem>
             {
                 new MerchPackItem(
-                    new Sku(123456, "Socks"),
+                    new Sku(123456),
                     new Quantity(6),
                     Size.L),
                 new MerchPackItem(
-                    new Sku(654321, "T-Shirt"),
+                    new Sku(654321),
                     new Quantity(1),
                     Size.L)
             };

@@ -15,7 +15,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
         /// <summary>
         /// Ждет поставки
         /// </summary>
-        public static MerchItemStatus SupplyAwaits = new(1, nameof(SupplyAwaits));
+        public static MerchItemStatus Awaits = new(1, nameof(Awaits));
         
         /// <summary>
         /// Выдан

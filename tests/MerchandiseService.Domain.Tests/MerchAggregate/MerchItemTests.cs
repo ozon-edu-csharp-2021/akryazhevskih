@@ -12,68 +12,61 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         public void CreateMerchItem()
         {
             //Arrange
-            var merchId = new Identifier(999);
-            var sku = new Sku(123456, "Socks");
+            var sku = new Sku(123456);
             var quantity = new Quantity(10);
-            var issuedQuantity = new Quantity(10);
             var size = Size.XL;
 
             //Act
-            var result = new MerchItem(merchId, sku, quantity, issuedQuantity, size);
+            var result = new MerchItem(sku, quantity, size);
 
             //Assert
-            Assert.Equal(merchId, result.MerchId);
             Assert.Equal(sku, result.Sku);
             Assert.Equal(quantity, result.Quantity);
-            Assert.Equal(issuedQuantity, result.IssuedQuantity);
             Assert.Equal(size, result.Size);
+            Assert.Null(result.IssuedQuantity);
         }
         
         [Fact]
         public void CreateMerchItemWithSupplyAwaitsStatus()
         {
             //Arrange
-            var merchId = new Identifier(999);
-            var sku = new Sku(123456, "Socks");
+            var sku = new Sku(123456);
             var quantity = new Quantity(10);
-            var issuedQuantity = new Quantity(5);
             var size = Size.XL;
 
 
             //Act
-            var result = new MerchItem(merchId, sku, quantity, issuedQuantity, size);
+            var result = new MerchItem(sku, quantity, size);
 
             //Assert
-            Assert.Equal(MerchItemStatus.SupplyAwaits, result.Status);
+            Assert.Equal(MerchItemStatus.Awaits, result.Status);
         }
         
         [Fact]
         public void CreateMerchItemWithDoneStatus()
         {
             //Arrange
-            var merchId = new Identifier(999);
-            var sku = new Sku(123456, "Socks");
+            var sku = new Sku(123456);
             var quantity = new Quantity(10);
             var issuedQuantity = new Quantity(10);
             var size = Size.XL;
 
 
             //Act
-            var result = new MerchItem(merchId, sku, quantity, issuedQuantity, size);
+            var result = new MerchItem(sku, quantity, size);
+            result.SetIssuedQuantity(issuedQuantity);
 
             //Assert
             Assert.Equal(MerchItemStatus.Done, result.Status);
         }
         
         [Fact]
-        public void SetMerchItemdQuantity()
+        public void SetMerchItemQuantity()
         {
             //Arrange
             var merchItem = new MerchItem(
-                new Identifier(999),
-                new Sku(123456, "Socks"),
+                new Sku(123456),
                 new Quantity(10),
-                new Quantity(0),
                 Size.XL);
             
             var quantity = new Quantity(10);
@@ -90,10 +83,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         {
             //Arrange
             var merchItem = new MerchItem(
-                new Identifier(999),
-                new Sku(123456, "Socks"),
+                new Sku(123456),
                 new Quantity(10),
-                new Quantity(0),
                 Size.XL);
             
             Quantity quantity = null;
@@ -109,10 +100,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         {
             //Arrange
             var merchItem = new MerchItem(
-                new Identifier(999),
-                new Sku(123456, "Socks"),
+                new Sku(123456),
                 new Quantity(10),
-                new Quantity(0),
                 Size.XL);
             
             var quantity = new Quantity(0);
@@ -128,10 +117,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         {
             //Arrange
             var merchItem = new MerchItem(
-                new Identifier(999),
-                new Sku(123456, "Socks"),
+                new Sku(123456),
                 new Quantity(10),
-                new Quantity(0),
                 Size.XL);
             
             var quantity = new Quantity(10);
@@ -148,10 +135,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         {
             //Arrange
             var merchItem = new MerchItem(
-                new Identifier(999),
-                new Sku(123456, "Socks"),
+                new Sku(123456),
                 new Quantity(10),
-                new Quantity(0),
                 Size.XL);
             
             var quantity = new Quantity(5);
@@ -168,10 +153,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         {
             //Arrange
             var merchItem = new MerchItem(
-                new Identifier(999),
-                new Sku(123456, "Socks"),
+                new Sku(123456),
                 new Quantity(10),
-                new Quantity(0),
                 Size.XL);
             
             Quantity quantity = null;
@@ -187,10 +170,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         {
             //Arrange
             var merchItem = new MerchItem(
-                new Identifier(999),
-                new Sku(123456, "Socks"),
+                new Sku(123456),
                 new Quantity(10),
-                new Quantity(0),
                 Size.XL);
             
             var quantity = new Quantity(0);
@@ -206,10 +187,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         {
             //Arrange
             var merchItem = new MerchItem(
-                new Identifier(999),
-                new Sku(123456, "Socks"),
+                new Sku(123456),
                 new Quantity(10),
-                new Quantity(0),
                 Size.XL);
             
             var quantity = new Quantity(15);
@@ -224,19 +203,16 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         public void CreateMerchItemWithoutSize()
         {
             //Arrange
-            var merchId = new Identifier(999);
-            var sku = new Sku(123456, "Socks");
+            var sku = new Sku(123456);
             var quantity = new Quantity(10);
-            var issuedQuantity = new Quantity(10);
 
             //Act
-            var result = new MerchItem(merchId, sku, quantity, issuedQuantity);
+            var result = new MerchItem(sku, quantity);
 
             //Assert
-            Assert.Equal(merchId, result.MerchId);
             Assert.Equal(sku, result.Sku);
             Assert.Equal(quantity, result.Quantity);
-            Assert.Equal(issuedQuantity, result.IssuedQuantity);
+            Assert.Null(result.IssuedQuantity);
             Assert.Null(result.Size);
         }
         
@@ -244,85 +220,46 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         public void CreateMerchPackWithNullSize()
         {
             //Arrange
-            var merchId = new Identifier(999);
-            var sku = new Sku(123456, "Socks");
+            var sku = new Sku(123456);
             var quantity = new Quantity(10);
-            var issuedQuantity = new Quantity(10);
             Size size = null;
 
             //Act
-            var result = new MerchItem(merchId, sku, quantity, issuedQuantity, size);
+            var result = new MerchItem( sku, quantity, size);
 
             //Assert
-            Assert.Equal(merchId, result.MerchId);
             Assert.Equal(sku, result.Sku);
             Assert.Equal(quantity, result.Quantity);
-            Assert.Equal(issuedQuantity, result.IssuedQuantity);
             Assert.Equal(size, result.Size);
-        }
-        
-        [Fact]
-        public void CreateMerchPackWithNullMerchId()
-        {
-            //Arrange
-            Identifier merchId = null;
-            var sku = new Sku(123456, "Socks");
-            var quantity = new Quantity(10);
-            var issuedQuantity = new Quantity(10);
-            var size = Size.XL;
-
-            //Act
-
-            //Assert
-            Assert.Throws<MerchItemException>(() => new MerchItem(merchId, sku, quantity, issuedQuantity, size));
+            Assert.Null(result.IssuedQuantity);
         }
         
         [Fact]
         public void CreateMerchPackWithNullSku()
         {
             //Arrange
-            var merchId = new Identifier(999);
             Sku sku = null;
             var quantity = new Quantity(10);
-            var issuedQuantity = new Quantity(10);
             var size = Size.XL;
 
             //Act
 
             //Assert
-            Assert.Throws<MerchItemException>(() => new MerchItem(merchId, sku, quantity, issuedQuantity, size));
+            Assert.Throws<MerchItemException>(() => new MerchItem(sku, quantity, size));
         }
         
         [Fact]
         public void CreateMerchPackWithNullQuantity()
         {
             //Arrange
-            var merchId = new Identifier(999);
-            var sku = new Sku(123456, "Socks");
+            var sku = new Sku(123456);
             Quantity quantity = null;
-            var issuedQuantity = new Quantity(10);
             var size = Size.XL;
 
             //Act
 
             //Assert
-            Assert.Throws<MerchItemException>(() => new MerchItem(merchId, sku, quantity, issuedQuantity, size));
-        }
-        
-        [Fact]
-        public void CreateMerchPackWithNullIssuedQuantity()
-        {
-            //Arrange
-            var merchId = new Identifier(999);
-            var sku = new Sku(123456, "Socks");
-            var quantity = new Quantity(10);
-            Quantity issuedQuantity = null;
-            var size = Size.XL;
-
-            //Act
-
-            //Assert
-            Assert.Throws<MerchItemException>(() => new MerchItem(merchId, sku, quantity, issuedQuantity, size));
+            Assert.Throws<MerchItemException>(() => new MerchItem(sku, quantity, size));
         }
     }
 }
