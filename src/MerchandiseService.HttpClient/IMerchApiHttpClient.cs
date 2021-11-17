@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using MerchandiseService.HttpClient.Models;
+using MerchandiseService.HttpModels;
 
 namespace MerchandiseService.HttpClient
 {
     public interface IMerchApiHttpClient
     {
-        Task<MerchRequest> RequestMerch(MerchRequest model, CancellationToken token);
+        Task<Merch> RequestMerch(MerchRequest model, CancellationToken token);
 
-        Task<List<MerchRequest>> GetMerchList(long employeeId, CancellationToken token);
+        Task<Merch> GetMerch(long merchId, CancellationToken token);
     }
 }

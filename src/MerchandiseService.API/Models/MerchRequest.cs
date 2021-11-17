@@ -13,5 +13,15 @@ namespace MerchandiseService.API.Models
         /// Идентификатор сотрудника
         /// </summary>
         public long EmployeeId { get; set; }
+        
+        /// <summary>
+        /// Размер
+        /// </summary>
+        public Size Size { get; set; }
+        
+        /// <summary>
+        /// Email
+        /// </summary>
+        public string Email { get; set; }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using MerchandiseService.HttpClient.Models;
+using MerchandiseService.HttpModels;
 using Newtonsoft.Json;
 
 namespace MerchandiseService.HttpClient
@@ -16,22 +16,22 @@ namespace MerchandiseService.HttpClient
             _httpClient = httpClient;
         }
         
-        public async Task<MerchRequest> RequestMerch(MerchRequest model, CancellationToken token)
+        public async Task<Merch> RequestMerch(MerchRequest model, CancellationToken token)
         {
             var content = new StringContent(JsonConvert.SerializeObject(model));
 
             var response = await _httpClient.PostAsync("v1/api/merch", content, token);
             var responseBody = await response.Content.ReadAsStringAsync();
             
-            return JsonConvert.DeserializeObject<MerchRequest>(responseBody);
+            return JsonConvert.DeserializeObject<Merch>(responseBody);
         }
         
-        public async Task<List<MerchRequest>> GetMerchList(long employeeId, CancellationToken token)
+        public async Task<Merch> GetMerch(long merchId, CancellationToken token)
         {
-            var response = await _httpClient.GetAsync($"v1/api/merch?employeeId=${employeeId}", token);
+            var response = await _httpClient.GetAsync($"v1/api/merch/${merchId}", token);
             var responseBody = await response.Content.ReadAsStringAsync();
             
-            return JsonConvert.DeserializeObject<List<MerchRequest>>(responseBody);
+            return JsonConvert.DeserializeObject<Merch>(responseBody);
         }
     }
 }

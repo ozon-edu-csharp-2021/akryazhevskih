@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using MerchandiseService.Infrastructure.Filters;
 using MerchandiseService.Infrastructure.Interceptors;
+using MerchandiseService.Infrastructure.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -35,7 +36,8 @@ namespace MerchandiseService.Infrastructure.Extensions
                 services.AddGrpc(options => options.Interceptors.Add<LoggingInterceptor>());
                 
                 services.AddControllers(options => options.Filters.Add<GlobalExceptionFilter>());
-                
+
+                services.AddScoped<IStockService, StockService>();
             });
             
             return builder;
