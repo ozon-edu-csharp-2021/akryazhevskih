@@ -22,7 +22,7 @@ namespace MerchandiseService.Infrastructure.Handlers.DomainEvent
             MerchStatusChangedToDoneDomainEvent notification,
             CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Merch with ID: {notification.MerchId} went to status {MerchStatus.Done}");
+            _logger.LogInformation($"Merch with ID: {notification.Merch.Id} went to status {MerchStatus.Done}");
             
             // Отправка сообщения на почту
             

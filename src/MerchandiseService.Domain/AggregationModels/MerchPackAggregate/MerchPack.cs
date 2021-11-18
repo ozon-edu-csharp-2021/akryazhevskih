@@ -10,8 +10,37 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
     /// <summary>
     /// Набор товаров
     /// </summary>
-    public class MerchPack : ValueObject
+    public class MerchPack : Entity
     {
+        public MerchPack(
+            long id, 
+            MerchType type,
+            string description,
+            Size size = null)
+        {
+            SetId(id);
+            Type = type;
+            Size = size;
+            Description = description;
+        }
+
+        private MerchPack(MerchType type, string description, Size size = null)
+        {
+            if (type is null)
+            {
+                throw new MerchPackException("Type cannot be null");
+            }
+
+            Type = type;
+            Size = size;
+            Description = description;
+        }
+
+        public MerchPack Create(MerchType type, string description, Size size = null)
+        {
+            return new MerchPack(type, description, size);
+        }
+
         public MerchPack(
             MerchType type,
             List<MerchPackItem> items,
@@ -41,21 +70,30 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
         /// Размер
         /// </summary>
         public Size? Size { get; }
+
+        /// <summary>
+        /// Описание
+        /// </summary>
+        public string Description { get; set; }
         
         /// <summary>
         /// Список товаров
         /// </summary>
-        private List<MerchPackItem> Items { get; }
+        private List<MerchPackItem> Items { get; set; }
 
-        public List<MerchPackItem> GetMerchPackItems()
+        public List<MerchPackItem> GetItems()
         {
             return new List<MerchPackItem>(Items);
         }
-        
-        protected override IEnumerable<object> GetEqualityComponents()
+
+        public void SetItems(IEnumerable<MerchPackItem> items)
         {
-            yield return Type;
-            yield return Items;
+            Items = new List<MerchPackItem>(items);
+        }
+
+        protected void SetId(long id)
+        {
+            Id = id;
         }
     }
 }

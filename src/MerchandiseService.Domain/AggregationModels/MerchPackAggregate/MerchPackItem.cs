@@ -6,14 +6,39 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
 {
     public class MerchPackItem : Entity
     {
-        /// <summary>
-        /// Товар
-        /// </summary>
         public MerchPackItem(
+            long id,
+            long merchPackId,
             Sku sku,
             Quantity quantity,
             Size size = null)
         {
+            if (sku is null)
+            {
+                throw new MerchPackItemException("Sku cannot be null");
+            }
+
+            if (quantity is null)
+            {
+                throw new MerchPackItemException("Quantity cannot be null");
+            }
+
+            Sku = sku;
+            Quantity = quantity;
+            Size = size;
+        }
+
+        private MerchPackItem(
+            long merchPackId,
+            Sku sku,
+            Quantity quantity,
+            Size size = null)
+        {
+            if (merchPackId <= 0)
+            {
+                throw new MerchPackItemException("Merch pack ID cannot be less than 1");
+            }
+
             if (sku is null)
             {
                 throw new MerchPackItemException("Sku cannot be null");
@@ -23,12 +48,23 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
             {
                 throw new MerchPackItemException("Quantity cannot be null");
             }
-            
+
+            MerchPackId = merchPackId;
             Sku = sku;
             Quantity = quantity;
             Size = size;
         }
-        
+
+        public static MerchPackItem Create(long merchPackId, Sku sku, Quantity quantity, Size size = null)
+        {
+            return new MerchPackItem(merchPackId, sku, quantity, size);
+        }
+
+        /// <summary>
+        /// ID набора
+        /// </summary>
+        public long MerchPackId { get; set; }
+
         /// <summary>
         /// Товарная позиция
         /// </summary>

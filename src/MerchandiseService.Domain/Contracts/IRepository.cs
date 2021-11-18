@@ -9,10 +9,10 @@ namespace MerchandiseService.Domain.Contracts
     /// <typeparam name="TAggregationRoot">Объект сущности для управления</typeparam>
     public interface IRepository<TAggregationRoot>
     {
-        /// <summary>
-        /// Объект <see cref="IUnitOfWork"/>
-        /// </summary>
-        IUnitOfWork UnitOfWork { get; }
+        ///// <summary>
+        ///// Объект <see cref="IUnitOfWork"/>
+        ///// </summary>
+        //IUnitOfWork UnitOfWork { get; }
         
         /// <summary>
         /// Создать новую сущность
@@ -27,7 +27,6 @@ namespace MerchandiseService.Domain.Contracts
         /// </summary>
         /// <param name="itemToUpdate">Объект для создания</param>
         /// <param name="cancellationToken">Токен для отмены операции. <see cref="CancellationToken"/></param>
-        /// <returns>Обновленная сущность сущность</returns>
-        Task<TAggregationRoot> UpdateAsync(TAggregationRoot itemToUpdate, CancellationToken cancellationToken = default);
+        Task UpdateAsync(TAggregationRoot itemToUpdate, CancellationToken cancellationToken = default);
     }
 }

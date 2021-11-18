@@ -14,10 +14,20 @@
         /// Количество 
         /// </summary>
         public int Quantity { get; set; }
-        
+
+        /// <summary>
+        /// Выданное количество 
+        /// </summary>
+        public int? IssuedQuantity { get; set; }
+
         /// <summary>
         /// Размер 
         /// </summary>
         public Size? Size { get; set; }
+
+        /// <summary>
+        /// Статус
+        /// </summary>
+        public MerchItemStatus Status { get; set; }
     }
 }

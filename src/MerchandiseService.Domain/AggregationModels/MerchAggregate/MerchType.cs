@@ -31,5 +31,16 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
 
             return merchType is not null;
         }
+
+        public static MerchType Parse(int value)
+        {
+            if (value < 1)
+            {
+                throw new MerchTypeException("ID cannot be less than 1");
+            }
+
+
+            return GetAll<MerchType>().FirstOrDefault(x => x.Id.Equals(value));
+        }
     }
 }

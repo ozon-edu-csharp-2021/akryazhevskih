@@ -12,5 +12,11 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
         Task<Merch> GetAsync(long employeeId, MerchType type, CancellationToken cancellationToken = default);
         
         Task<IEnumerable<Merch>> GetSupplyAwaitsMerches(long sku, CancellationToken cancellationToken = default);
+
+        Task<MerchItem> CreateAsync(MerchItem merchItem, CancellationToken cancellationToken = default);
+
+        Task UpdateAsync(MerchItem merchItem, CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<MerchItem>> GetMerchItems(long merchId, CancellationToken cancellationToken = default);
     }
 }

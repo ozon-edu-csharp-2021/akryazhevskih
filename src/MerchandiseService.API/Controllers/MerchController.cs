@@ -54,11 +54,13 @@ namespace MerchandiseService.API.Controllers
                     EmployeeId = merch.Employee.Id,
                     CreateAt = merch.CreatedAt,
                     IssuedAt = merch.IssuedAt,
-                    Items = merch.GetMerchItems().Select(x => new MerchItem
+                    Items = merch.GetItems().Select(x => new MerchItem
                     {
                         Sku = x.Sku.Code,
                         Quantity = x.Quantity.Value,
-                        Size = x.Size is null ? null : (Size) x.Size.Id
+                        IssuedQuantity = x.IssuedQuantity?.Value,
+                        Size = x.Size is null ? null : (Size) x.Size.Id,
+                        Status = (MerchItemStatus)x.Status.Id
                     })
                 };
 
@@ -103,11 +105,13 @@ namespace MerchandiseService.API.Controllers
                 EmployeeId = merch.Employee.Id,
                 CreateAt = merch.CreatedAt,
                 IssuedAt = merch.IssuedAt,
-                Items = merch.GetMerchItems().Select(x => new MerchItem
+                Items = merch.GetItems().Select(x => new MerchItem
                 {
                     Sku = x.Sku.Code,
                     Quantity = x.Quantity.Value,
-                    Size = x.Size is null ? null : (Size)x.Size.Id
+                    IssuedQuantity = x.IssuedQuantity?.Value,
+                    Size = x.Size is null ? null : (Size)x.Size.Id,
+                    Status = (MerchItemStatus)x.Status.Id
                 })
             };
             

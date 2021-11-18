@@ -1,4 +1,6 @@
-﻿using MerchandiseService.Domain.Models;
+﻿using MerchandiseService.Domain.Exceptions.MerchAggregate;
+using MerchandiseService.Domain.Models;
+using System.Linq;
 
 namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
 {
@@ -31,5 +33,20 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
         /// Выдан
         /// </summary>
         public static MerchStatus Done = new(4, nameof(Done));
+
+        /// <summary>
+        /// Не взят в работу из за ошибки.
+        /// </summary>
+        public static MerchStatus Failed = new(5, nameof(Failed));
+
+        public static MerchStatus Parse(int value)
+        {
+            if (value < 1)
+            {
+                throw new MerchTypeException("ID cannot be less than 1");
+            }
+
+            return GetAll<MerchStatus>().FirstOrDefault(x => x.Id.Equals(value));
+        }
     }
 }

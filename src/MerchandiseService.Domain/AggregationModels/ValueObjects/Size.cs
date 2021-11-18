@@ -32,5 +32,15 @@ namespace MerchandiseService.Domain.AggregationModels.ValueObjects
 
             return size is not null;
         }
+
+        public static Size Parse(int value)
+        {
+            if (value < 1)
+            {
+                throw new SizeException("ID cannot be less than 1");
+            }
+
+            return GetAll<Size>().FirstOrDefault(x => x.Id.Equals(value));
+        }
     }
 }

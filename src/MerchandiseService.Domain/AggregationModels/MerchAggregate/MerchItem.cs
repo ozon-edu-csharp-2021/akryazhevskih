@@ -11,10 +11,37 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
     public class MerchItem : Entity
     {
         public MerchItem(
+            long id,
+            long merchId,
+            Sku sku,
+            Quantity quantity,
+            Quantity issuedQuantity,
+            Size size = null)
+        {
+            SetId(id);
+            MerchId = merchId;
+            Sku = sku;
+            Quantity = quantity;
+            IssuedQuantity = issuedQuantity;
+            Size = size;
+        }
+
+        public static MerchItem Create(long merchId, Sku sku, Quantity quantity, Size size = null)
+        {
+            return new MerchItem(merchId, sku, quantity, size);
+        }
+
+        private MerchItem(
+            long merchId,
             Sku sku,
             Quantity quantity,
             Size size = null)
         {
+            if (merchId <= 0)
+            {
+                throw new MerchItemException("Merch ID cannot be less than 1");
+            }
+
             if (sku is null)
             {
                 throw new MerchItemException("Sku cannot be null");
@@ -25,10 +52,16 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
                 throw new MerchItemException("Quantity cannot be null");
             }
 
+            MerchId = merchId;
             Sku = sku;
             Quantity = quantity;
             Size = size;
         }
+
+        /// <summary>
+        /// ID мерча
+        /// </summary>
+        public long MerchId { get; private set; }
         
         /// <summary>
         /// Товарная позиция
@@ -69,6 +102,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
             
             Quantity = quantity;
         }
+
         public void SetIssuedQuantity(Quantity quantity)
         {
             if (quantity is null)
@@ -87,6 +121,11 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
             }
             
             IssuedQuantity = quantity;
+        }
+
+        protected void SetId(long id)
+        {
+            Id = id;
         }
     }
 }

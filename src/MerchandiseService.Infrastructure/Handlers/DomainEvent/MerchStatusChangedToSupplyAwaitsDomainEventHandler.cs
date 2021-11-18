@@ -22,7 +22,7 @@ namespace MerchandiseService.Infrastructure.Handlers.DomainEvent
             MerchStatusChangedToSupplyAwaitsDomainEvent notification,
             CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Merch with ID: {notification.MerchId} went to status {MerchStatus.SupplyAwaits}");
+            _logger.LogInformation($"Merch with ID: {notification.Merch.Id} went to status {MerchStatus.SupplyAwaits}");
             
             return Task.CompletedTask;
         }

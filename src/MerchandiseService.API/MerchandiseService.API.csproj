@@ -19,6 +19,7 @@
     <ItemGroup>
       <ProjectReference Include="..\MerchandiseService.HttpModels\MerchandiseService.HttpModels.csproj" />
       <ProjectReference Include="..\MerchandiseService.Infrastructure\MerchandiseService.Infrastructure.csproj" />
+      <ProjectReference Include="..\MerchandiseService.Migrator\MerchandiseService.Migrator.csproj" />
     </ItemGroup>
 
     <ItemGroup>

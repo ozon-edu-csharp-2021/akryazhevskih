@@ -1,14 +1,19 @@
 ﻿using MediatR;
+using MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
 using MerchandiseService.Domain.AggregationModels.MerchAggregate;
 using MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using MerchandiseService.Domain.Contracts;
-using MerchandiseService.Infrastructure.Handlers.DomainEvent;
-using MerchandiseService.Infrastructure.Handlers.MerchAggregate;
-using MerchandiseService.Infrastructure.Handlers.Supply;
+using MerchandiseService.Infrastructure.Configuration;
+using MerchandiseService.Infrastructure.Repositories.Implementation.EmployeeAggregate;
+using MerchandiseService.Infrastructure.Repositories.Implementation.MerchRepository;
+using MerchandiseService.Infrastructure.Repositories.Infrastructure.Implementation;
+using MerchandiseService.Infrastructure.Repositories.Infrastructure.Interfaces;
 using MerchandiseService.Infrastructure.Repositories.MerchPackRepository;
-using MerchandiseService.Infrastructure.Repositories.MerchRepository;
 using MerchandiseService.Infrastructure.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
+using System.Reflection;
 
 namespace MerchandiseService.Infrastructure.Extensions
 {
@@ -21,17 +26,8 @@ namespace MerchandiseService.Infrastructure.Extensions
         /// <returns>Объект <see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
-            // Command handlers
-            services.AddMediatR(typeof(CreateMerchCommandHandler).Assembly);
-            services.AddMediatR(typeof(GetMerchCommandHandler).Assembly);
-            services.AddMediatR(typeof(CheckMerchPackExpansionCommandHandler).Assembly);
-            services.AddMediatR(typeof(SupplyShippedCommandHandler).Assembly);
-            
-            // Event handlers
-            services.AddMediatR(typeof(MerchStatusChangedToInWorkDomainEventHandler).Assembly);
-            services.AddMediatR(typeof(MerchStatusChangedToSupplyAwaitsDomainEventHandler).Assembly);
-            services.AddMediatR(typeof(MerchStatusChangedToDoneDomainEventHandler).Assembly);
-            
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+
             return services;
         }
         
@@ -40,12 +36,17 @@ namespace MerchandiseService.Infrastructure.Extensions
         /// </summary>
         /// <param name="services">Объект IServiceCollection</param>
         /// <returns>Объект <see cref="IServiceCollection"/></returns>
-        public static IServiceCollection AddInfrastructureRepositories(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructureRepositories(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IUnitOfWork, DataBaseContext>();
-            
+            services.Configure<DatabaseConnectionOptions>(configuration.GetSection(nameof(DatabaseConnectionOptions)));
+
+            services.AddScoped<IDbConnectionFactory<NpgsqlConnection>, DbConnectionFactory>();
+            services.AddScoped<IUnitOfWork, DbContext>();
+            services.AddScoped<IChangeTracker, ChangeTracker>();
+
             services.AddScoped<IMerchRepository, MerchRepository>();
             services.AddScoped<IMerchPackRepository, MerchPackRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IStockService, StockService>();
             
             return services;

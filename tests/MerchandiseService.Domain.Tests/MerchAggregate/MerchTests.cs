@@ -13,19 +13,19 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
          [Fact]
          public void CreateMerch()
          {
-             //Arrange
-             var employee = new Employee(999, Size.XL, new Email("test999@test.ru"));
+            //Arrange
+             var employee = Employee.Create(999, Size.XL, new Email("test999@test.ru"));
              var type = MerchType.VeteranPack;
              
              var items = new List<MerchItem>();
 
              //Act
-             var result = new Merch(employee, type);
+             var result = Merch.Create(employee, type);
 
              //Assert
              Assert.Equal(employee, result.Employee);
              Assert.Equal(type, result.Type);
-             Assert.Equal(items, result.GetMerchItems());
+             Assert.Equal(items, result.GetItems());
              Assert.Equal(MerchStatus.New, result.Status);
          }
          
@@ -33,11 +33,12 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
          public void CreateMerchWithInWorkStatus()
          {
              //Arrange
-             var employee = new Employee(999, Size.XL, new Email("test999@test.ru"));
+             var employee = Employee.Create(999, Size.XL, new Email("test999@test.ru"));
              var type = MerchType.VeteranPack;
              
-             var result = new Merch(employee, type);
-             var merchItem = new MerchItem(new Sku(123456), new Quantity(10), Size.XL);
+             var result = Merch.Create(employee, type);
+            
+             var merchItem = MerchItem.Create(1, new Sku(123456), new Quantity(10), Size.XL);
              result.TryAddMerchItem(merchItem, out var reason);
 
              //Act
@@ -51,11 +52,11 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
          public void CreateMerchWithSupplyAwaitsStatus()
          {
              //Arrange
-             var employee = new Employee(999, Size.XL, new Email("test999@test.ru"));
+             var employee = Employee.Create(999, Size.XL, new Email("test999@test.ru"));
              var type = MerchType.VeteranPack;
 
-             var result = new Merch(employee, type);
-             var merchItem = new MerchItem(new Sku(123456), new Quantity(10), Size.XL);
+             var result = Merch.Create(employee, type);
+             var merchItem = MerchItem.Create(1, new Sku(123456), new Quantity(10), Size.XL);
              merchItem.SetIssuedQuantity(new Quantity(10));
 
              //Act
@@ -69,11 +70,11 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
          public void CreateMerchWithDoneStatus()
          {
              //Arrange
-             var employee = new Employee(999, Size.XL, new Email("test999@test.ru"));
+             var employee = Employee.Create(999, Size.XL, new Email("test999@test.ru"));
              var type = MerchType.VeteranPack;
 
-             var result = new Merch(employee, type);
-             var merchItem = new MerchItem(new Sku(123456), new Quantity(10), Size.XL);
+             var result = Merch.Create(employee, type);
+             var merchItem = MerchItem.Create(1, new Sku(123456), new Quantity(10), Size.XL);
              merchItem.SetIssuedQuantity(new Quantity(10));
 
              //Act
@@ -87,12 +88,12 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
          public void AddItemToMerch()
          {
              //Arrange
-             var employee = new Employee(999, Size.XL, new Email("test999@test.ru"));
+             var employee = Employee.Create(999, Size.XL, new Email("test999@test.ru"));
              var type = MerchType.VeteranPack;
              
-             var result = new Merch(employee, type);
+             var result = Merch.Create(employee, type);
              
-             var item = new MerchItem(new Sku(123456), new Quantity(10), Size.XL);
+             var item = MerchItem.Create(1, new Sku(123456), new Quantity(10), Size.XL);
              var items = new List<MerchItem>
              {
                  item
@@ -102,19 +103,19 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
              result.TryAddMerchItem(item, out _);
 
              //Assert
-             Assert.Equal(items, result.GetMerchItems());
+             Assert.Equal(items, result.GetItems());
          }
          
          [Fact]
          public void AddExistingItemToMerch()
          {
              //Arrange
-             var employee = new Employee(999, Size.XL, new Email("test999@test.ru"));
+             var employee = Employee.Create(999, Size.XL, new Email("test999@test.ru"));
              var type = MerchType.VeteranPack;
              
-             var result = new Merch(employee, type);
+             var result = Merch.Create(employee, type);
              
-             var item = new MerchItem(new Sku(123456), new Quantity(10), Size.XL);
+             var item = MerchItem.Create(1, new Sku(123456), new Quantity(10), Size.XL);
              var items = new List<MerchItem>
              {
                  item
@@ -125,17 +126,17 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
              result.TryAddMerchItem(item, out _);
 
              //Assert
-             Assert.Equal(items, result.GetMerchItems());
+             Assert.Equal(items, result.GetItems());
          }
          
          [Fact]
          public void AddNullItemToMerch()
          {
              //Arrange
-             var employee = new Employee(999, Size.XL, new Email("test999@test.ru"));
+             var employee = Employee.Create(999, Size.XL, new Email("test999@test.ru"));
              var type = MerchType.VeteranPack;
              
-             var result = new Merch(employee, type);
+             var result = Merch.Create(employee, type);
 
              MerchItem item = null;
              var items = new List<MerchItem>();
@@ -144,19 +145,19 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
              result.TryAddMerchItem(item, out _);
 
              //Assert
-             Assert.Equal(items, result.GetMerchItems());
+             Assert.Equal(items, result.GetItems());
          }
          
          [Fact]
          public void UpdateItemInMerch()
          {
              //Arrange
-             var employee = new Employee(999, Size.XL, new Email("test999@test.ru"));
+             var employee = Employee.Create(999, Size.XL, new Email("test999@test.ru"));
              var type = MerchType.VeteranPack;
              
-             var result = new Merch(employee, type);
+             var result = Merch.Create(employee, type);
              
-             var item = new MerchItem(new Sku(123456), new Quantity(10), Size.XL);
+             var item = MerchItem.Create(1, new Sku(123456), new Quantity(10), Size.XL);
              
              result.TryAddMerchItem(item, out _);
              
@@ -167,10 +168,10 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
              };
 
              //Act
-             result.GetMerchItems().FirstOrDefault().SetIssuedQuantity(new Quantity(10));
+             result.GetItems().FirstOrDefault().SetIssuedQuantity(new Quantity(10));
 
              //Assert
-             Assert.Equal(items, result.GetMerchItems());
+             Assert.Equal(items, result.GetItems());
          }
          
          [Fact]
@@ -183,20 +184,20 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
              //Act
 
              //Assert
-             Assert.Throws<MerchException>(() => new Merch(employee, type));
+             Assert.Throws<MerchException>(() => Merch.Create(employee, type));
          }
          
          [Fact]
          public void CreateMerchWithNullType()
          {
              //Arrange
-             var employee = new Employee(999, Size.XL, new Email("test999@test.ru"));
+             var employee = Employee.Create(999, Size.XL, new Email("test999@test.ru"));
              MerchType type = null;
 
              //Act
 
              //Assert
-             Assert.Throws<MerchException>(() => new Merch(employee, type));
+             Assert.Throws<MerchException>(() => Merch.Create(employee, type));
          }
     }
 }

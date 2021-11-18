@@ -17,7 +17,7 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
             var size = Size.XL;
 
             //Act
-            var result = new MerchItem(sku, quantity, size);
+            var result = MerchItem.Create(1, sku, quantity, size);
 
             //Assert
             Assert.Equal(sku, result.Sku);
@@ -36,7 +36,7 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
 
 
             //Act
-            var result = new MerchItem(sku, quantity, size);
+            var result = MerchItem.Create(1, sku, quantity, size);
 
             //Assert
             Assert.Equal(MerchItemStatus.Awaits, result.Status);
@@ -53,7 +53,7 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
 
 
             //Act
-            var result = new MerchItem(sku, quantity, size);
+            var result = MerchItem.Create(1, sku, quantity, size);
             result.SetIssuedQuantity(issuedQuantity);
 
             //Assert
@@ -64,7 +64,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         public void SetMerchItemQuantity()
         {
             //Arrange
-            var merchItem = new MerchItem(
+            var merchItem = MerchItem.Create(
+                1,
                 new Sku(123456),
                 new Quantity(10),
                 Size.XL);
@@ -82,7 +83,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         public void SetMerchItemNullQuantity()
         {
             //Arrange
-            var merchItem = new MerchItem(
+            var merchItem = MerchItem.Create(
+                1,
                 new Sku(123456),
                 new Quantity(10),
                 Size.XL);
@@ -99,7 +101,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         public void SetMerchItemZeroQuantity()
         {
             //Arrange
-            var merchItem = new MerchItem(
+            var merchItem = MerchItem.Create(
+                1,
                 new Sku(123456),
                 new Quantity(10),
                 Size.XL);
@@ -116,7 +119,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         public void SetMerchItemIssuedQuantity()
         {
             //Arrange
-            var merchItem = new MerchItem(
+            var merchItem = MerchItem.Create(
+                1,
                 new Sku(123456),
                 new Quantity(10),
                 Size.XL);
@@ -134,7 +138,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         public void SetMerchItemBelowNecessaryIssuedQuantity()
         {
             //Arrange
-            var merchItem = new MerchItem(
+            var merchItem = MerchItem.Create(
+                1,
                 new Sku(123456),
                 new Quantity(10),
                 Size.XL);
@@ -152,7 +157,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         public void SetMerchItemNullIssuedQuantity()
         {
             //Arrange
-            var merchItem = new MerchItem(
+            var merchItem = MerchItem.Create(
+                1,
                 new Sku(123456),
                 new Quantity(10),
                 Size.XL);
@@ -169,7 +175,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         public void SetMerchItemZeroIssuedQuantity()
         {
             //Arrange
-            var merchItem = new MerchItem(
+            var merchItem = MerchItem.Create(
+                1,
                 new Sku(123456),
                 new Quantity(10),
                 Size.XL);
@@ -186,7 +193,8 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
         public void SetMerchItemAboveNecessaryIssuedQuantity()
         {
             //Arrange
-            var merchItem = new MerchItem(
+            var merchItem = MerchItem.Create(
+                1,
                 new Sku(123456),
                 new Quantity(10),
                 Size.XL);
@@ -207,7 +215,7 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
             var quantity = new Quantity(10);
 
             //Act
-            var result = new MerchItem(sku, quantity);
+            var result = MerchItem.Create(1, sku, quantity);
 
             //Assert
             Assert.Equal(sku, result.Sku);
@@ -225,7 +233,7 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
             Size size = null;
 
             //Act
-            var result = new MerchItem( sku, quantity, size);
+            var result = MerchItem.Create(1, sku, quantity, size);
 
             //Assert
             Assert.Equal(sku, result.Sku);
@@ -245,7 +253,7 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
             //Act
 
             //Assert
-            Assert.Throws<MerchItemException>(() => new MerchItem(sku, quantity, size));
+            Assert.Throws<MerchItemException>(() => MerchItem.Create(1, sku, quantity, size));
         }
         
         [Fact]
@@ -259,7 +267,7 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
             //Act
 
             //Assert
-            Assert.Throws<MerchItemException>(() => new MerchItem(sku, quantity, size));
+            Assert.Throws<MerchItemException>(() => MerchItem.Create(1, sku, quantity, size));
         }
     }
 }

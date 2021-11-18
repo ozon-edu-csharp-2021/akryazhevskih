@@ -16,7 +16,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
             var size = Size.XL;
 
             //Act
-            var result = new MerchPackItem(sku, quantity, size);
+            var result = MerchPackItem.Create(1, sku, quantity, size);
 
             //Assert
             Assert.Equal(sku, result.Sku);
@@ -32,7 +32,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
             var quantity = new Quantity(10);
 
             //Act
-            var result = new MerchPackItem(sku, quantity);
+            var result = MerchPackItem.Create(1,sku, quantity);
 
             //Assert
             Assert.Equal(sku, result.Sku);
@@ -49,7 +49,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
             Size size = null;
 
             //Act
-            var result = new MerchPackItem(sku, quantity, size);
+            var result = MerchPackItem.Create(1, sku, quantity, size);
 
             //Assert
             Assert.Equal(sku, result.Sku);
@@ -68,7 +68,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
             //Act
 
             //Assert
-            Assert.Throws<MerchPackItemException>(() => new MerchPackItem(sku, quantity, size));
+            Assert.Throws<MerchPackItemException>(() => MerchPackItem.Create(1, sku, quantity, size));
         }
         
         [Fact]
@@ -82,7 +82,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
             //Act
 
             //Assert
-            Assert.Throws<MerchPackItemException>(() => new MerchPackItem(sku, quantity, size));
+            Assert.Throws<MerchPackItemException>(() => MerchPackItem.Create(1, sku, quantity, size));
         }
     }
 }

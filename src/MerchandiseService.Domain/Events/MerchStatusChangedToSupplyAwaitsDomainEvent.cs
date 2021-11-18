@@ -1,14 +1,16 @@
 ﻿using MediatR;
+using MerchandiseService.Domain.AggregationModels.MerchAggregate;
 
 namespace MerchandiseService.Domain.Events
 {
     public class MerchStatusChangedToSupplyAwaitsDomainEvent : INotification
     {
-        public MerchStatusChangedToSupplyAwaitsDomainEvent(long merchId)
+        public MerchStatusChangedToSupplyAwaitsDomainEvent(
+            Merch merch)
         {
-            MerchId = merchId;
+            Merch = merch;
         }
-        
-        public long MerchId { get; }
+
+        public Merch Merch { get; }
     }
 }

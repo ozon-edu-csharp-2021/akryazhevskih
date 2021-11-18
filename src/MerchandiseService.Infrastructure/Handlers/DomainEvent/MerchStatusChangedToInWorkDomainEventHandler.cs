@@ -32,27 +32,21 @@ namespace MerchandiseService.Infrastructure.Handlers.DomainEvent
             MerchStatusChangedToInWorkDomainEvent notification,
             CancellationToken cancellationToken)
         {
-            var merchId = notification.MerchId;
+            var merch = notification.Merch;
+            var merchId = merch.Id;
             
             _logger.LogInformation($"Merch with ID: {merchId} went to status {MerchStatus.InWork}");
-            
-            var merch = await _merchRepository.GetAsync(merchId, cancellationToken);
-
-            if (merch is null)
-            {
-                throw new MerchNullException($"Merch with ID: {merchId} not found");
-            }
 
             var isDone = true;
-            var merchItems = merch.GetMerchItems().Where(x => x.Status.Equals(MerchItemStatus.Awaits));
-            
+            var merchItems = merch.GetItems().Where(x => x.Status.Equals(MerchItemStatus.Awaits));
+
             foreach (var item in merchItems)
             {
                 var available = await _stockService.GetStockItem(item.Sku.Code, cancellationToken);
                 if (available == null)
                 {
                     _logger.LogWarning($"Could not find position by sku {item.Sku.Code}");
-                    
+
                     isDone = false;
                     continue;
                 }
@@ -62,8 +56,8 @@ namespace MerchandiseService.Infrastructure.Handlers.DomainEvent
                     isDone = false;
                     continue;
                 }
-                
-                var neededQuantity = item.Quantity.Value - item.IssuedQuantity.Value;
+
+                var neededQuantity = item.IssuedQuantity == null ? item.Quantity.Value : item.Quantity.Value - item.IssuedQuantity.Value;
                 var quantity = available.Quantity >= neededQuantity
                                 ? neededQuantity
                                 : available.Quantity;
@@ -90,6 +84,8 @@ namespace MerchandiseService.Infrastructure.Handlers.DomainEvent
             }
 
             await _merchRepository.UpdateAsync(merch, cancellationToken);
+
+
         }
     }
 }

@@ -13,6 +13,24 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
     public class Merch : Entity
     {
         public Merch(
+            long id,
+            Employee employe,
+            MerchStatus status,
+            MerchType type,
+            DateTime createdAt,
+            DateTime issuedAt)
+        {
+            SetId(id);
+            Employee = employe;
+            Status = status;
+            Type = type;
+            CreatedAt = createdAt;
+            IssuedAt = issuedAt;
+
+            Items = new List<MerchItem>();
+        }
+
+        private Merch(
             Employee employee,
             MerchType type)
         {
@@ -20,18 +38,23 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
             {
                 throw new MerchException("Employee cannot be null");
             }
-            
+
             if (type is null)
             {
                 throw new MerchException("Merch type cannot be null");
             }
-            
+
             Employee = employee;
             Type = type;
-            
+
             Items = new List<MerchItem>();
             Status = MerchStatus.New;
             CreatedAt = DateTime.UtcNow;
+        }
+
+        public static Merch Create(Employee employee, MerchType type)
+        {
+            return new Merch(employee, type);
         }
         
         /// <summary>
@@ -62,13 +85,18 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
         /// <summary>
         /// Список товаров
         /// </summary>
-        private List<MerchItem> Items { get; }
+        private List<MerchItem> Items { get; set; }
 
-        public List<MerchItem> GetMerchItems()
+        public List<MerchItem> GetItems()
         {
             return new List<MerchItem>(Items);
         }
-        
+
+        public void SetItems(IEnumerable<MerchItem> items)
+        {
+            Items = new List<MerchItem>(items);
+        }
+
         /// <summary>
         /// Добавление товара в список
         /// </summary>
@@ -98,8 +126,8 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
         {
             Status = MerchStatus.InWork;
             
-            var merchStatusChangedToInWorkDomainEvent = new MerchStatusChangedToInWorkDomainEvent(Id);
-            
+            var merchStatusChangedToInWorkDomainEvent = new MerchStatusChangedToInWorkDomainEvent(this);
+
             AddDomainEvent(merchStatusChangedToInWorkDomainEvent);
         }
 
@@ -107,7 +135,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
         {
             Status = MerchStatus.SupplyAwaits;
             
-            var merchStatusChangedToSupplyAwaitsDomainEvent = new MerchStatusChangedToSupplyAwaitsDomainEvent(Id);
+            var merchStatusChangedToSupplyAwaitsDomainEvent = new MerchStatusChangedToSupplyAwaitsDomainEvent(this);
             
             AddDomainEvent(merchStatusChangedToSupplyAwaitsDomainEvent);
         }
@@ -117,9 +145,14 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
             Status = MerchStatus.Done;
             IssuedAt = DateTime.UtcNow;
             
-            var merchStatusChangedToDoneDomainEvent = new MerchStatusChangedToDoneDomainEvent(Id);
+            var merchStatusChangedToDoneDomainEvent = new MerchStatusChangedToDoneDomainEvent(this);
             
             AddDomainEvent(merchStatusChangedToDoneDomainEvent);
+        }
+
+        protected void SetId(long id)
+        {
+            Id = id;
         }
     }
 }
