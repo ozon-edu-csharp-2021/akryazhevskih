@@ -9,11 +9,6 @@ namespace MerchandiseService.Domain.Contracts
     /// <typeparam name="TAggregationRoot">Объект сущности для управления</typeparam>
     public interface IRepository<TAggregationRoot>
     {
-        ///// <summary>
-        ///// Объект <see cref="IUnitOfWork"/>
-        ///// </summary>
-        //IUnitOfWork UnitOfWork { get; }
-        
         /// <summary>
         /// Создать новую сущность
         /// </summary>

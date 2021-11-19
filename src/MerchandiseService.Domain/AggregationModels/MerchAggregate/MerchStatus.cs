@@ -34,11 +34,6 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
         /// </summary>
         public static MerchStatus Done = new(4, nameof(Done));
 
-        /// <summary>
-        /// Не взят в работу из за ошибки.
-        /// </summary>
-        public static MerchStatus Failed = new(5, nameof(Failed));
-
         public static MerchStatus Parse(int value)
         {
             if (value < 1)
