@@ -7,8 +7,8 @@ namespace MerchandiseService.HttpClient
 {
     public interface IMerchApiHttpClient
     {
-        Task<Merch?> RequestMerch(MerchRequest model, CancellationToken token);
+        Task<Merch> RequestMerch(MerchRequest model, CancellationToken token);
 
-        Task<Merch?> GetMerch(long merchId, CancellationToken token);
+        Task<Merch> GetMerch(long merchId, CancellationToken token);
     }
 }
