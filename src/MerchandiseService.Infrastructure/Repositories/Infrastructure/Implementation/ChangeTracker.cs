@@ -1,7 +1,7 @@
-﻿using MerchandiseService.Domain.Models;
-using MerchandiseService.Infrastructure.Repositories.Infrastructure.Interfaces;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using MerchandiseService.Domain.Models;
+using MerchandiseService.Infrastructure.Repositories.Infrastructure.Interfaces;
 
 namespace MerchandiseService.Infrastructure.Repositories.Infrastructure.Implementation
 {

@@ -1,7 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+      <TargetFramework>net5.0</TargetFramework>
+      <Nullable>enable</Nullable>
+      <CodeAnalysisRuleSet>../../StyleCopeRules.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,6 +26,10 @@
       <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
       <PackageReference Include="Npgsql" Version="6.0.0" />
+      <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.2.3" />
       <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.2.3" />
       <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.2.3" />
@@ -33,5 +43,9 @@
       <ProjectReference Include="..\MerchandiseService.Grpc\MerchandiseService.Grpc.csproj" />
       <ProjectReference Include="..\MerchandiseService.HttpModels\MerchandiseService.HttpModels.csproj" />
     </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="../../.editorconfig" />
+  </ItemGroup>
 
 </Project>

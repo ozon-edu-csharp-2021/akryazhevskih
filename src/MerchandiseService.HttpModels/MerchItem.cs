@@ -9,19 +9,19 @@
         /// Товарная позиция
         /// </summary>
         public long Sku { get; set; }
-        
+
         /// <summary>
-        /// Количество 
+        /// Количество
         /// </summary>
         public int Quantity { get; set; }
 
         /// <summary>
-        /// Выданное количество 
+        /// Выданное количество
         /// </summary>
         public int? IssuedQuantity { get; set; }
 
         /// <summary>
-        /// Размер 
+        /// Размер
         /// </summary>
         public Size? Size { get; set; }
 

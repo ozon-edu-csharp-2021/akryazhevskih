@@ -15,12 +15,12 @@ namespace MerchandiseService.Domain.AggregationModels.ValueObjects
             {
                 throw new QuantityException("Quantity cannot be less than 0");
             }
-            
+
             Value = quantity;
         }
-        
+
         public int Value { get; }
-        
+
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;

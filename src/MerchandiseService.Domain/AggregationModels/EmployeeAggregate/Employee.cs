@@ -18,21 +18,31 @@ namespace MerchandiseService.Domain.AggregationModels.EmployeeAggregate
             {
                 throw new EmployeeException("ID cannot be less than 1");
             }
-            
+
             if (size is null)
             {
                 throw new EmployeeException("Size cannot be null");
             }
-            
+
             if (email is null)
             {
                 throw new EmployeeException("Email cannot be null");
             }
-            
+
             Size = size;
             Email = email;
             SetId(id);
         }
+
+        /// <summary>
+        /// Размер
+        /// </summary>
+        public Size Size { get; private set; }
+
+        /// <summary>
+        /// Email
+        /// </summary>
+        public Email Email { get; private set; }
 
         public static Employee Create(long id, Size size, Email email)
         {
@@ -54,16 +64,6 @@ namespace MerchandiseService.Domain.AggregationModels.EmployeeAggregate
             Size = size;
             Email = email;
         }
-
-        /// <summary>
-        /// Размер
-        /// </summary>
-        public Size Size { get; private set; }
-        
-        /// <summary>
-        /// Email
-        /// </summary>
-        public Email Email { get; private set; }
 
         protected void SetId(long id)
         {

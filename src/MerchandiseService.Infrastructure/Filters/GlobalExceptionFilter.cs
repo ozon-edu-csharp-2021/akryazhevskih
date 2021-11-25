@@ -1,15 +1,16 @@
-﻿using MerchandiseService.Infrastructure.Models;
+﻿using System;
+using MerchandiseService.Infrastructure.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using System;
 
+#pragma warning disable CS8601 // Possible null reference assignment.
 namespace MerchandiseService.Infrastructure.Filters
 {
     internal class GlobalExceptionFilter : ExceptionFilterAttribute
     {
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
         public GlobalExceptionFilter(ILogger<GlobalExceptionFilter> logger)
         {
@@ -33,3 +34,4 @@ namespace MerchandiseService.Infrastructure.Filters
         }
     }
 }
+#pragma warning restore CS8601 // Possible null reference assignment.

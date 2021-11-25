@@ -6,7 +6,7 @@ using MerchandiseService.Domain.Contracts;
 
 namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
 {
-    public interface IMerchPackRepository: IRepository<MerchPack>
+    public interface IMerchPackRepository : IRepository<MerchPack>
     {
         Task<MerchPack> GetAsync(MerchType type, Size size, CancellationToken cancellationToken = default);
     }

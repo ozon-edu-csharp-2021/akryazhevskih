@@ -15,16 +15,21 @@ namespace MerchandiseService.Infrastructure.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var assembly = Assembly.GetEntryAssembly().GetName();
+            var assembly = Assembly.GetEntryAssembly()?.GetName();
+
+            if (assembly == null)
+            {
+                return;
+            }
 
             var response = new VersionResponse
             {
                 Version = assembly.Version?.ToString() ?? "-",
                 ServiceName = assembly.Name
             };
-            
+
             context.Response.ContentType = MediaTypeNames.Application.Json;
-            
+
             await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
         }
     }

@@ -1,13 +1,13 @@
-﻿using Dapper;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Dapper;
 using MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
 using MerchandiseService.Domain.AggregationModels.ValueObjects;
 using MerchandiseService.Domain.Contracts;
 using MerchandiseService.Infrastructure.Repositories.Infrastructure.Interfaces;
 using MerchandiseService.Infrastructure.Repositories.Models;
 using Npgsql;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MerchandiseService.Infrastructure.Repositories.Implementation.EmployeeAggregate
 {

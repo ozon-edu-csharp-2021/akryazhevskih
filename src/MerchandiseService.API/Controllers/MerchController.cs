@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -22,11 +24,11 @@ namespace MerchandiseService.API.Controllers
         public MerchController(
             IMediator mediator)
         {
-            _mediator = mediator;
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator), "Cannot be null");
         }
-        
+
         /// <summary>
-        /// Запрос на выдачу мерча 
+        /// Запрос на выдачу мерча
         /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(Merch), StatusCodes.Status200OK)]
@@ -37,7 +39,7 @@ namespace MerchandiseService.API.Controllers
             var createMerchCommand = new CreateMerchCommand
             {
                 MerchType = request.Type,
-                EmployeeId = request.EmployeeId,
+                EmployeeId = request.EmployeeId.Value,
                 Size = request.Size,
                 Email = request.Email
             };
@@ -49,8 +51,8 @@ namespace MerchandiseService.API.Controllers
                 var result = new Merch
                 {
                     Id = merch.Id,
-                    Type = (MerchType) merch.Type.Id,
-                    Status = (MerchStatus) merch.Status.Id,
+                    Type = (MerchType)merch.Type.Id,
+                    Status = (MerchStatus)merch.Status.Id,
                     EmployeeId = merch.Employee.Id,
                     CreateAt = merch.CreatedAt,
                     IssuedAt = merch.IssuedAt,
@@ -58,45 +60,45 @@ namespace MerchandiseService.API.Controllers
                     {
                         Sku = x.Sku.Code,
                         Quantity = x.Quantity.Value,
-                        IssuedQuantity = x.IssuedQuantity?.Value,
-                        Size = x.Size is null ? null : (Size) x.Size.Id,
+                        IssuedQuantity = x.IssuedQuantity == null ? 0 : x.IssuedQuantity.Value,
+                        Size = x.Size is null ? null : (Size)x.Size.Id,
                         Status = (MerchItemStatus)x.Status.Id
                     })
                 };
 
                 return Ok(result);
             }
-            catch (MerchAlreadyExistException _)
+            catch (MerchAlreadyExistException)
             {
                 return Conflict();
             }
-            catch (MerchPackNullException _)
+            catch (MerchPackNullException)
             {
                 return NotFound();
             }
         }
-        
+
         /// <summary>
         /// Получение информации о мерче
         /// </summary>
         [HttpGet("{merchId}")]
         [ProducesResponseType(typeof(Merch), StatusCodes.Status200OK)]
         public async Task<ActionResult<Merch>> GetMerch(
-            long merchId,
+            [Range(1, long.MaxValue)] long merchId,
             CancellationToken token)
         {
             var getMerchCommand = new GetMerchCommand
             {
                 MerchId = merchId
             };
-            
+
             var merch = await _mediator.Send(getMerchCommand, token);
 
             if (merch is null)
             {
                 return NotFound();
             }
-            
+
             var result = new Merch
             {
                 Id = merch.Id,
@@ -109,12 +111,12 @@ namespace MerchandiseService.API.Controllers
                 {
                     Sku = x.Sku.Code,
                     Quantity = x.Quantity.Value,
-                    IssuedQuantity = x.IssuedQuantity?.Value,
+                    IssuedQuantity = x.IssuedQuantity == null ? 0 : x.IssuedQuantity.Value,
                     Size = x.Size is null ? null : (Size)x.Size.Id,
                     Status = (MerchItemStatus)x.Status.Id
                 })
             };
-            
+
             return Ok(result);
         }
     }

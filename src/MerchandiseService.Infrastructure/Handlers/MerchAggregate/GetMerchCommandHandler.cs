@@ -31,14 +31,14 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
 
         public async Task<Merch> Handle(GetMerchCommand command, CancellationToken cancellationToken)
         {
-            await _unitOfWork.StartTransaction(cancellationToken);
+            await _unitOfWork.StartTransactionAsync(cancellationToken);
 
             var merch = await _merchRepository.GetAsync(command.MerchId, cancellationToken);
             if (merch is null)
             {
                 return null;
             }
-            
+
             var checkMerchPackExpansionCommand = new CheckMerchPackExpansionCommand(merch.Id);
 
             try
@@ -52,10 +52,10 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error when check merch pack expansion: {ex.Message}");
+                _logger.LogError(ex, "Error when check merch pack expansion");
             }
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.CommitTransactionAsync(cancellationToken);
             return merch;
         }
     }

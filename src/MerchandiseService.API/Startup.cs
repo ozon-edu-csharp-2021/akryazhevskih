@@ -20,7 +20,7 @@ namespace MerchandiseService.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddInfrastructureRepositories(Configuration);
-            services.AddInfrastructureServices();
+            services.AddInfrastructureServices(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -13,10 +13,16 @@ namespace MerchandiseService.Domain.Contracts
         /// Начать транзакцию.
         /// </summary>
         /// <param name="cancellationToken">Токен отмены.</param>
-        Task StartTransaction(CancellationToken cancellationToken = default);
+        Task StartTransactionAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Сохранить изменения и завершить транзакцию.
+        /// Завершить транзакцию.
+        /// </summary>
+        /// <param name="cancellationToken">Токен отмены.</param>
+        Task CommitTransactionAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Сохранить изменения.
         /// </summary>
         /// <param name="cancellationToken">Токен отмены.</param>
         Task SaveChangesAsync(CancellationToken cancellationToken = default);

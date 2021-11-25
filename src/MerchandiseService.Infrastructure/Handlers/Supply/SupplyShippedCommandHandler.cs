@@ -23,17 +23,17 @@ namespace MerchandiseService.Infrastructure.Handlers.Supply
             _merchRepository = merchRepository ?? throw new ArgumentNullException(nameof(merchRepository), "Cannot be null");
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork), "Cannot be null");
         }
-        
+
         public async Task<IEnumerable<Merch>> Handle(SupplyShippedCommand command, CancellationToken cancellationToken)
         {
-            await _unitOfWork.StartTransaction(cancellationToken);
+            await _unitOfWork.StartTransactionAsync(cancellationToken);
 
             var merchesInWork = new List<Merch>();
-            
+
             foreach (var supplyItem in command.SupplyItems)
             {
                 var availableQuantity = supplyItem.Quantity;
-                
+
                 var merches = await _merchRepository.GetSupplyAwaitsMerches(supplyItem.Sku, cancellationToken);
 
                 foreach (var merch in merches.OrderByDescending(x => x.CreatedAt))
@@ -44,20 +44,20 @@ namespace MerchandiseService.Infrastructure.Handlers.Supply
                     }
 
                     var merchItems = await _merchRepository.GetMerchItems(merch.Id);
-                    
-                    var merchItem = merchItems.FirstOrDefault(x => x.Sku.Equals(new Sku(supplyItem.Sku)));
+
+                    var merchItem = merchItems.First(x => x.Sku.Equals(new Sku(supplyItem.Sku)));
 
                     var neededQuantity = merchItem.IssuedQuantity == null ? merchItem.Quantity.Value : merchItem.Quantity.Value - merchItem.IssuedQuantity.Value;
-                    
+
                     var quantity = availableQuantity >= neededQuantity
                         ? neededQuantity
                         : availableQuantity;
 
                     merch.SetStatusInWork();
                     merchesInWork.Add(merch);
-                    
+
                     availableQuantity -= quantity;
-                    
+
                     if (availableQuantity == 0)
                     {
                         break;
@@ -65,7 +65,7 @@ namespace MerchandiseService.Infrastructure.Handlers.Supply
                 }
             }
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
             return merchesInWork;
         }

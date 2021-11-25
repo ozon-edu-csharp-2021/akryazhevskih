@@ -8,17 +8,17 @@ namespace MerchandiseService.HttpClient.Models
         /// Тип мерча
         /// </summary>
         public MerchType Type { get; set; }
-        
+
         /// <summary>
         /// Идентификатор сотрудника
         /// </summary>
         public long EmployeeId { get; set; }
-        
+
         /// <summary>
         /// Размер
         /// </summary>
         public Size Size { get; set; }
-        
+
         /// <summary>
         /// Email
         /// </summary>

@@ -18,7 +18,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
             MerchStatus status,
             MerchType type,
             DateTime createdAt,
-            DateTime issuedAt)
+            DateTime? issuedAt)
         {
             SetId(id);
             Employee = employe;
@@ -52,16 +52,11 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
             CreatedAt = DateTime.UtcNow;
         }
 
-        public static Merch Create(Employee employee, MerchType type)
-        {
-            return new Merch(employee, type);
-        }
-        
         /// <summary>
         /// Сотрудник
         /// </summary>
         public Employee Employee { get; }
-        
+
         /// <summary>
         /// Статус
         /// </summary>
@@ -70,24 +65,24 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
         /// <summary>
         /// Тип набора
         /// </summary>
-        public MerchType Type  { get; }
-        
+        public MerchType Type { get; }
+
         /// <summary>
         /// Дата создания запроса
         /// </summary>
-        public DateTime CreatedAt  { get; }
-        
+        public DateTime CreatedAt { get; }
+
         /// <summary>
         /// Дата выдачи
         /// </summary>
-        public DateTime? IssuedAt  { get; private set; }
-        
+        public DateTime? IssuedAt { get; private set; }
+
         /// <summary>
         /// Список товаров
         /// </summary>
         private List<MerchItem> Items { get; set; }
 
-        public List<MerchItem> GetItems()
+        public IEnumerable<MerchItem> GetItems()
         {
             return new List<MerchItem>(Items);
         }
@@ -97,6 +92,11 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
             Items = new List<MerchItem>(items);
         }
 
+        public static Merch Create(Employee employee, MerchType type)
+        {
+            return new Merch(employee, type);
+        }
+
         /// <summary>
         /// Добавление товара в список
         /// </summary>
@@ -104,28 +104,33 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
         public bool TryAddMerchItem(MerchItem item, out string reason)
         {
             reason = string.Empty;
-            
+
             if (item is null)
             {
                 reason = "MerchItem cannot be null";
                 return false;
             }
-            
+
+            if (Items == null)
+            {
+                Items = new List<MerchItem>();
+            }
+
             if (Items.Exists(x => x.Sku.Equals(item.Sku)))
             {
                 reason = $"MerchItem with sku {item.Sku.Code} already exists";
                 return false;
             }
-            
+
             Items.Add(item);
-            
+
             return true;
         }
 
         public void SetStatusInWork()
         {
             Status = MerchStatus.InWork;
-            
+
             var merchStatusChangedToInWorkDomainEvent = new MerchStatusChangedToInWorkDomainEvent(this);
 
             AddDomainEvent(merchStatusChangedToInWorkDomainEvent);
@@ -134,9 +139,9 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
         public void SetStatusSupplyAwaits()
         {
             Status = MerchStatus.SupplyAwaits;
-            
+
             var merchStatusChangedToSupplyAwaitsDomainEvent = new MerchStatusChangedToSupplyAwaitsDomainEvent(this);
-            
+
             AddDomainEvent(merchStatusChangedToSupplyAwaitsDomainEvent);
         }
 
@@ -144,9 +149,9 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
         {
             Status = MerchStatus.Done;
             IssuedAt = DateTime.UtcNow;
-            
+
             var merchStatusChangedToDoneDomainEvent = new MerchStatusChangedToDoneDomainEvent(this);
-            
+
             AddDomainEvent(merchStatusChangedToDoneDomainEvent);
         }
 

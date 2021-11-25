@@ -8,7 +8,7 @@ namespace MerchandiseService.Infrastructure.Commands.CheckMerchPackExpansion
         {
             MerchId = merchId;
         }
-        
+
         /// <summary>
         /// Идентификатор мерча
         /// </summary>

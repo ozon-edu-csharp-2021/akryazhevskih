@@ -10,6 +10,7 @@ services:
       - "5004:5004"
     environment:
       DatabaseConnectionOptions__ConnectionString: "Host=host.docker.internal;Port=5428;Database=merchandise-service;Username=postgres;Password=merchandiseServicePassword"
+      StockApiOptions__Path: http://172.17.0.1:5402
     depends_on:
       - supply-service
       - emailing-service
@@ -48,6 +49,7 @@ services:
     hostname: stock-api
     ports:
       - "5400:80"
+      - "5402:82"
     environment:
       DatabaseConnectionOptions__ConnectionString: "Host=host.docker.internal;Port=5427;Database=stock-api;Username=postgres;Password=stockApiPassword"
     depends_on:

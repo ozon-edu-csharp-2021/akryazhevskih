@@ -11,15 +11,15 @@ using Npgsql;
 
 namespace MerchandiseService.Infrastructure.Repositories.Infrastructure.Implementation
 {
-    internal class DbContext : IUnitOfWork
+    internal class EntitiesContext : IUnitOfWork
     {
         private readonly IDbConnectionFactory<NpgsqlConnection> _connectionFactory;
         private readonly IPublisher _publisher;
         private readonly IChangeTracker _changeTracker;
 
-        private NpgsqlTransaction _transaction;
+        private NpgsqlTransaction? _transaction;
 
-        public DbContext(
+        public EntitiesContext(
             IDbConnectionFactory<NpgsqlConnection> connectionFactory,
             IPublisher publisher,
             IChangeTracker changeTracker)
@@ -29,7 +29,7 @@ namespace MerchandiseService.Infrastructure.Repositories.Infrastructure.Implemen
             _changeTracker = changeTracker ?? throw new ArgumentNullException(nameof(changeTracker), "Cannot be null");
         }
 
-        public async Task StartTransaction(CancellationToken cancellationToken = default)
+        public async Task StartTransactionAsync(CancellationToken cancellationToken = default)
         {
             if (_transaction is not null)
             {
@@ -41,13 +41,20 @@ namespace MerchandiseService.Infrastructure.Repositories.Infrastructure.Implemen
             _transaction = await connection.BeginTransactionAsync(cancellationToken);
         }
 
-        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
         {
             if (_transaction is null)
             {
                 throw new TransactionNullException("Transaction cannot be null");
             }
 
+            await SaveChangesAsync(cancellationToken);
+
+            await _transaction.CommitAsync(cancellationToken);
+        }
+
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
             var domainEvents = _changeTracker.TrackedEntities.SelectMany(x =>
             {
                 if (x.DomainEvents is null || !x.DomainEvents.Any())
@@ -67,8 +74,6 @@ namespace MerchandiseService.Infrastructure.Repositories.Infrastructure.Implemen
             {
                 await _publisher.Publish(domainEvent, cancellationToken);
             }
-
-            await _transaction.CommitAsync(cancellationToken);
         }
 
         public void Dispose()

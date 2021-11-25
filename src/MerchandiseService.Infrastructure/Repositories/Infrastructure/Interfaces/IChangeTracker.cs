@@ -1,5 +1,5 @@
-﻿using MerchandiseService.Domain.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MerchandiseService.Domain.Models;
 
 namespace MerchandiseService.Infrastructure.Repositories.Infrastructure.Interfaces
 {

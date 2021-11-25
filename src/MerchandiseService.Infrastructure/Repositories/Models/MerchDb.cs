@@ -14,6 +14,6 @@ namespace MerchandiseService.Infrastructure.Repositories.Models
 
         public DateTime CreatedAt { get; set; }
 
-        public DateTime IssuedAt { get; set; }
+        public DateTime? IssuedAt { get; set; }
     }
 }

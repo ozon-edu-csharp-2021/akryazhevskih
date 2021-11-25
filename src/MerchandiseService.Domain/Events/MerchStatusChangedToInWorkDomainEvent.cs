@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using MerchandiseService.Domain.AggregationModels.MerchAggregate;
-using System.Collections.Generic;
 
 namespace MerchandiseService.Domain.Events
 {

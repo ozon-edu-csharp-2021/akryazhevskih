@@ -11,7 +11,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
             long merchPackId,
             Sku sku,
             Quantity quantity,
-            Size size = null)
+            Size? size = null)
         {
             if (sku is null)
             {
@@ -32,7 +32,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
             long merchPackId,
             Sku sku,
             Quantity quantity,
-            Size size = null)
+            Size? size = null)
         {
             if (merchPackId <= 0)
             {
@@ -43,7 +43,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
             {
                 throw new MerchPackItemException("Sku cannot be null");
             }
-            
+
             if (quantity is null)
             {
                 throw new MerchPackItemException("Quantity cannot be null");
@@ -55,11 +55,6 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
             Size = size;
         }
 
-        public static MerchPackItem Create(long merchPackId, Sku sku, Quantity quantity, Size size = null)
-        {
-            return new MerchPackItem(merchPackId, sku, quantity, size);
-        }
-
         /// <summary>
         /// ID набора
         /// </summary>
@@ -69,15 +64,20 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
         /// Товарная позиция
         /// </summary>
         public Sku Sku { get; }
-        
+
         /// <summary>
         /// Количество
         /// </summary>
         public Quantity Quantity { get; }
-        
+
         /// <summary>
         /// Размер
         /// </summary>
         public Size? Size { get; }
+
+        public static MerchPackItem Create(long merchPackId, Sku sku, Quantity quantity, Size? size = null)
+        {
+            return new MerchPackItem(merchPackId, sku, quantity, size);
+        }
     }
 }

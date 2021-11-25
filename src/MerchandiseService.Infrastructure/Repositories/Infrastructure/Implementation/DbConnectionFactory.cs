@@ -1,11 +1,11 @@
-﻿using MerchandiseService.Infrastructure.Configuration;
-using MerchandiseService.Infrastructure.Repositories.Infrastructure.Interfaces;
-using Microsoft.Extensions.Options;
-using Npgsql;
-using System;
+﻿using System;
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
+using MerchandiseService.Infrastructure.Configuration;
+using MerchandiseService.Infrastructure.Repositories.Infrastructure.Interfaces;
+using Microsoft.Extensions.Options;
+using Npgsql;
 
 namespace MerchandiseService.Infrastructure.Repositories.Infrastructure.Implementation
 {
@@ -13,7 +13,7 @@ namespace MerchandiseService.Infrastructure.Repositories.Infrastructure.Implemen
     {
         private readonly DatabaseConnectionOptions _connectionOptions;
 
-        private NpgsqlConnection _connection;
+        private NpgsqlConnection? _connection;
 
         public DbConnectionFactory(
             IOptions<DatabaseConnectionOptions> connectionOptions)

@@ -43,23 +43,23 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
 
         public async Task<Merch> Handle(CreateMerchCommand command, CancellationToken cancellationToken)
         {
-            if (!Size.TryParse((int) command.Size, out var size))
+            if (!Size.TryParse((int)command.Size, out var size))
             {
                 throw new SizeException($"Unsupported size {command.Size}");
             }
 
-            if (!MerchType.TryParse((int) command.MerchType, out var merchType))
+            if (!MerchType.TryParse((int)command.MerchType, out var merchType))
             {
                 throw new MerchTypeException($"Unsupported merch type {command.MerchType}");
             }
 
-            await _unitOfWork.StartTransaction(cancellationToken);
+            await _unitOfWork.StartTransactionAsync(cancellationToken);
 
             var existingMerch = await _merchRepository.GetAsync(command.EmployeeId, merchType, cancellationToken);
             if (existingMerch is not null)
             {
                 var checkMerchPackExpansionCommand = new CheckMerchPackExpansionCommand(existingMerch.Id);
-                
+
                 try
                 {
                     var checkResult = await _mediator.Send(checkMerchPackExpansionCommand, cancellationToken);
@@ -71,18 +71,18 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Error when check merch pack expansion: {ex.Message}");
+                    _logger.LogError(ex, "Error when check merch pack expansion");
                 }
-                
+
                 throw new MerchAlreadyExistException($"Merch with type equal {merchType.Name} for employee {command.EmployeeId} already exist");
             }
 
             var merchPack = await _merchPackRepository.GetAsync(merchType, size, cancellationToken);
-            if (merchPack == null)
+            if (merchPack is null)
             {
                 throw new MerchPackNullException($"Merch pack for type {merchType.Name} and size {size.Name} not found");
             }
-            
+
             var merchPackItems = merchPack.GetItems();
 
             var employee = await _employeeRepository.GetAsync(command.EmployeeId);
@@ -104,7 +104,7 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
             foreach (var item in merchPackItems)
             {
                 var merchItem = MerchItem.Create(merch.Id, item.Sku, item.Quantity, item.Size);
-                
+
                 if (!merch.TryAddMerchItem(merchItem, out var reason))
                 {
                     _logger.LogWarning($"Failed to add item: {reason}");
@@ -116,7 +116,7 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
             merch.SetStatusInWork();
 
             await _merchRepository.UpdateAsync(merch, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
             return merch;
         }

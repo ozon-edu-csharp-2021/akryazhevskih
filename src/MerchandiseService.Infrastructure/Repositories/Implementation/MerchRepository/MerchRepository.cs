@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Dapper;
 using MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
 using MerchandiseService.Domain.AggregationModels.MerchAggregate;
 using MerchandiseService.Domain.AggregationModels.ValueObjects;
 using MerchandiseService.Infrastructure.Repositories.Infrastructure.Interfaces;
-using Npgsql;
-using Dapper;
 using MerchandiseService.Infrastructure.Repositories.Models;
-using System.Linq;
+using Npgsql;
 
 namespace MerchandiseService.Infrastructure.Repositories.Implementation.MerchRepository
 {
@@ -25,7 +25,7 @@ namespace MerchandiseService.Infrastructure.Repositories.Implementation.MerchRep
             _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory), "Cannot be null");
             _changeTracker = changeTracker ?? throw new ArgumentNullException(nameof(changeTracker), "Cannot be null");
         }
-        
+
         public async Task<Merch> CreateAsync(Merch merch, CancellationToken cancellationToken = default)
         {
             var query = @"
@@ -98,7 +98,7 @@ namespace MerchandiseService.Infrastructure.Repositories.Implementation.MerchRep
 
             var result = await connection.QueryAsync<MerchDb, EmployeeDb, Merch>(
                 query,
-                (merch, employee) => 
+                (merch, employee) =>
                 {
                     return new Merch(
                         merch.Id,

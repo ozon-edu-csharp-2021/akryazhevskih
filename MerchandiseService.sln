@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{8C0AE2
 		Dockerfile = Dockerfile
 		entrypoint.sh = entrypoint.sh
 		readme.md = readme.md
+		StyleCopeRules.ruleset = StyleCopeRules.ruleset
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{AED5D2C2-D11F-41F9-BB30-BBD0B2C2115B}"

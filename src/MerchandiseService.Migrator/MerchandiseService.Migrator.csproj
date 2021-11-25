@@ -15,11 +15,4 @@
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
         <PackageReference Include="Npgsql" Version="6.0.0" />
     </ItemGroup>
-    <ItemGroup>
-        <Content Include="../MerchandiseService.API/appsettings.json">
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-    </ItemGroup>
 </Project>

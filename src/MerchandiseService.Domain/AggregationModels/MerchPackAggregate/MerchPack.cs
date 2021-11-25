@@ -13,10 +13,10 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
     public class MerchPack : Entity
     {
         public MerchPack(
-            long id, 
+            long id,
             MerchType type,
             string description,
-            Size size = null)
+            Size? size = null)
         {
             SetId(id);
             Type = type;
@@ -24,7 +24,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
             Description = description;
         }
 
-        private MerchPack(MerchType type, string description, Size size = null)
+        private MerchPack(MerchType type, string description, Size? size = null)
         {
             if (type is null)
             {
@@ -36,36 +36,31 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
             Description = description;
         }
 
-        public MerchPack Create(MerchType type, string description, Size size = null)
-        {
-            return new MerchPack(type, description, size);
-        }
-
         public MerchPack(
             MerchType type,
-            List<MerchPackItem> items,
-            Size size = null)
+            IEnumerable<MerchPackItem> items,
+            Size? size = null)
         {
             if (type is null)
             {
                 throw new MerchPackException("Sku cannot be null");
             }
-            
+
             if (items is null || !items.Any())
             {
                 throw new MerchPackException("Items cannot be null");
             }
-            
+
             Type = type;
             Items = items;
             Size = size;
         }
-        
+
         /// <summary>
         /// Тип набора
         /// </summary>
-        public MerchType Type  { get; }
-        
+        public MerchType Type { get; }
+
         /// <summary>
         /// Размер
         /// </summary>
@@ -75,13 +70,13 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
         /// Описание
         /// </summary>
         public string Description { get; set; }
-        
+
         /// <summary>
         /// Список товаров
         /// </summary>
-        private List<MerchPackItem> Items { get; set; }
+        private IEnumerable<MerchPackItem>? Items { get; set; }
 
-        public List<MerchPackItem> GetItems()
+        public IEnumerable<MerchPackItem> GetItems()
         {
             return new List<MerchPackItem>(Items);
         }
@@ -89,6 +84,11 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
         public void SetItems(IEnumerable<MerchPackItem> items)
         {
             Items = new List<MerchPackItem>(items);
+        }
+
+        public MerchPack Create(MerchType type, string description, Size? size = null)
+        {
+            return new MerchPack(type, description, size);
         }
 
         protected void SetId(long id)

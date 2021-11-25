@@ -10,17 +10,17 @@ namespace MerchandiseService.Infrastructure.Commands.CreateMerch
         /// Тип набора
         /// </summary>
         public MerchType MerchType { get; init; }
-        
+
         /// <summary>
         /// Идентификатор сотрудника
         /// </summary>
         public long EmployeeId { get; init; }
-        
+
         /// <summary>
         /// Размер
         /// </summary>
         public Size Size { get; init; }
-        
+
         /// <summary>
         /// Email
         /// </summary>
