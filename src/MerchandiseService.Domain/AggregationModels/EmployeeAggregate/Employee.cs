@@ -31,7 +31,7 @@ namespace MerchandiseService.Domain.AggregationModels.EmployeeAggregate
 
             Size = size;
             Email = email;
-            SetId(id);
+            Id = id;
         }
 
         /// <summary>
@@ -63,11 +63,6 @@ namespace MerchandiseService.Domain.AggregationModels.EmployeeAggregate
 
             Size = size;
             Email = email;
-        }
-
-        protected void SetId(long id)
-        {
-            Id = id;
         }
     }
 }

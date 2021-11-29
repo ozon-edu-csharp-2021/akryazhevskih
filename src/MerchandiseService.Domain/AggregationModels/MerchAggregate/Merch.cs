@@ -20,7 +20,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
             DateTime createdAt,
             DateTime? issuedAt)
         {
-            SetId(id);
+            Id = id;
             Employee = employe;
             Status = status;
             Type = type;
@@ -153,11 +153,6 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
             var merchStatusChangedToDoneDomainEvent = new MerchStatusChangedToDoneDomainEvent(this);
 
             AddDomainEvent(merchStatusChangedToDoneDomainEvent);
-        }
-
-        protected void SetId(long id)
-        {
-            Id = id;
         }
     }
 }
