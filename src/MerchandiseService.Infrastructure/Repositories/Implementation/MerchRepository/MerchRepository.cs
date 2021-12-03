@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
-using MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
 using MerchandiseService.Domain.AggregationModels.MerchAggregate;
 using MerchandiseService.Domain.AggregationModels.ValueObjects;
 using MerchandiseService.Infrastructure.Repositories.Infrastructure.Interfaces;
@@ -29,15 +28,28 @@ namespace MerchandiseService.Infrastructure.Repositories.Implementation.MerchRep
         public async Task<Merch> CreateAsync(Merch merch, CancellationToken cancellationToken = default)
         {
             var query = @"
-                INSERT INTO merches (employee_id, status, type, created_at)
-                VALUES (@employee_id, @status, @type, @created_at)
-                RETURNING id, employee_id as EmployeeId , status, type, created_at as CreatedAt, issued_at as IssuedAt;";
+                INSERT INTO merches (employee_name, employee_email, manager_name, manager_email, status, type, size, created_at)
+                VALUES (@employee_name, @employee_email, @manager_name, @manager_email, @status, @type, @size, @created_at)
+                RETURNING id, 
+                          employee_name as EmployeeName,
+                          employee_email as EmployeeEmail,
+                          manager_name as ManagerName,
+                          manager_email as ManagerEmail,
+                          status,
+                          type,
+                          size,
+                          created_at as CreatedAt,
+                          issued_at as IssuedAt;";
 
             var parameters = new
             {
-                employee_id = merch.Employee.Id,
+                employee_name = merch.Employee.Person.FullName,
+                employee_email = merch.Employee.Email.Value,
+                manager_name = merch.Manager.Person.FullName,
+                manager_email = merch.Manager.Email.Value,
                 status = merch.Status.Id,
                 type = merch.Type.Id,
+                size = merch.Size.Id,
                 created_at = merch.CreatedAt
             };
 
@@ -47,9 +59,19 @@ namespace MerchandiseService.Infrastructure.Repositories.Implementation.MerchRep
 
             var createdMerch = new Merch(
                 result.Id,
-                merch.Employee,
+                new Employee
+                {
+                    Person = new Person(result.EmployeeName),
+                    Email = new Email(result.EmployeeEmail)
+                },
+                new Manager
+                {
+                    Person = new Person(result.ManagerName),
+                    Email = new Email(result.ManagerEmail)
+                },
                 MerchStatus.Parse(result.Status),
                 MerchType.Parse(result.Type),
+                Size.Parse(result.Size),
                 result.CreatedAt,
                 result.IssuedAt);
 
@@ -83,11 +105,11 @@ namespace MerchandiseService.Infrastructure.Repositories.Implementation.MerchRep
         public async Task<Merch> GetAsync(long id, CancellationToken cancellationToken = default)
         {
             var query = @"
-                SELECT m.id, m.status, m.type, m.created_at as CreatedAt, m.issued_at as IssuedAt,
-                       e.id, e.size, e.email
-                FROM merches m
-                JOIN employees e on e.id = m.employee_id
-                WHERE m.id = @id;";
+                SELECT id, status, type, size, created_at as CreatedAt, issued_at as IssuedAt,
+                       employee_name as EmployeeName, employee_email as EmployeeEmail,
+                       manager_name as ManagerName, manager_email as ManagerEmail
+                FROM merches
+                WHERE id = @id;";
 
             var parameters = new
             {
@@ -96,29 +118,30 @@ namespace MerchandiseService.Infrastructure.Repositories.Implementation.MerchRep
 
             var connection = await _connectionFactory.CreateConnection(cancellationToken);
 
-            var result = await connection.QueryAsync<MerchDb, EmployeeDb, Merch>(
-                query,
-                (merch, employee) =>
-                {
-                    return new Merch(
-                        merch.Id,
-                        new Employee(
-                            employee.Id,
-                            Size.Parse(employee.Size),
-                            new Email(employee.Email)),
-                        MerchStatus.Parse(merch.Status),
-                        MerchType.Parse(merch.Type),
-                        merch.CreatedAt,
-                        merch.IssuedAt);
-                },
-                parameters);
+            var result = await connection.QueryFirstOrDefaultAsync<MerchDb>(query, parameters);
 
-            var merch = result.FirstOrDefault();
-
-            if (merch is null)
+            if (result is null)
             {
                 return null;
             }
+
+            var merch = new Merch(
+                result.Id,
+                new Employee
+                {
+                    Person = new Person(result.EmployeeName),
+                    Email = new Email(result.EmployeeEmail)
+                },
+                new Manager
+                {
+                    Person = new Person(result.ManagerName),
+                    Email = new Email(result.ManagerEmail)
+                },
+                MerchStatus.Parse(result.Status),
+                MerchType.Parse(result.Type),
+                Size.Parse(result.Size),
+                result.CreatedAt,
+                result.IssuedAt);
 
             var merchItems = await GetMerchItems(merch.Id, cancellationToken);
 
@@ -129,47 +152,48 @@ namespace MerchandiseService.Infrastructure.Repositories.Implementation.MerchRep
             return merch;
         }
 
-        public async Task<Merch> GetAsync(long employeeId, MerchType type, CancellationToken cancellationToken = default)
+        public async Task<Merch> GetAsync(string employeeEmail, MerchType type, CancellationToken cancellationToken = default)
         {
             var query = @"
-                SELECT m.id, m.status, m.type, m.created_at as CreatedAt, m.issued_at as IssuedAt,
-                       e.id, e.size, e.email
-                FROM merches m
-                JOIN employees e on e.id = m.employee_id
-                WHERE m.employee_id = @employee_id
+                SELECT id, status, type, size, created_at as CreatedAt, issued_at as IssuedAt,
+                       employee_name as EmployeeName, employee_email as EmployeeEmail,
+                       manager_name as ManagerName, manager_email as ManagerEmail
+                FROM merches
+                WHERE employee_email = @employee_email
                 AND type = @type;";
 
             var parameters = new
             {
-                employee_id = employeeId,
+                employee_email = employeeEmail,
                 type = type.Id
             };
 
             var connection = await _connectionFactory.CreateConnection(cancellationToken);
 
-            var result = await connection.QueryAsync<MerchDb, EmployeeDb, Merch>(
-                query,
-                (merch, employee) =>
-                {
-                    return new Merch(
-                        merch.Id,
-                        new Employee(
-                            employee.Id,
-                            Size.Parse(employee.Size),
-                            new Email(employee.Email)),
-                        MerchStatus.Parse(merch.Status),
-                        MerchType.Parse(merch.Type),
-                        merch.CreatedAt,
-                        merch.IssuedAt);
-                },
-                parameters);
+            var result = await connection.QueryFirstOrDefaultAsync<MerchDb>(query, parameters);
 
-            var merch = result.FirstOrDefault();
-
-            if (merch is null)
+            if (result is null)
             {
                 return null;
             }
+
+            var merch = new Merch(
+                result.Id,
+                new Employee
+                {
+                    Person = new Person(result.EmployeeName),
+                    Email = new Email(result.EmployeeEmail)
+                },
+                new Manager
+                {
+                    Person = new Person(result.ManagerName),
+                    Email = new Email(result.ManagerEmail)
+                },
+                MerchStatus.Parse(result.Status),
+                MerchType.Parse(result.Type),
+                Size.Parse(result.Size),
+                result.CreatedAt,
+                result.IssuedAt);
 
             var merchItems = await GetMerchItems(merch.Id, cancellationToken);
 
@@ -183,10 +207,10 @@ namespace MerchandiseService.Infrastructure.Repositories.Implementation.MerchRep
         public async Task<IEnumerable<Merch>> GetSupplyAwaitsMerches(long sku, CancellationToken cancellationToken = default)
         {
             var query = @"
-                SELECT m.id, m.status, m.type, m.created_at as CreatedAt, m.issued_at as IssuedAt,
-                       e.id, e.size, e.email
+                SELECT m.id, m.status, m.type, m.size, m.created_at as CreatedAt, m.issued_at as IssuedAt,
+                       m.employee_name as EmployeeName, m.employee_email as EmployeeEmail,
+                       m.manager_name as ManagerName, m.manager_email as ManagerEmail
                 FROM merches m
-                JOIN employees e on e.id = m.employee_id
                 JOIN merch_items mi on mi.merch_id = m.id
                 WHERE mi.sku = @sku
                 AND mi.status = @status;";
@@ -199,29 +223,32 @@ namespace MerchandiseService.Infrastructure.Repositories.Implementation.MerchRep
 
             var connection = await _connectionFactory.CreateConnection(cancellationToken);
 
-            var result = await connection.QueryAsync<MerchDb, EmployeeDb, Merch>(
-                query,
-                (merch, employee) =>
-                {
-                    return new Merch(
-                        merch.Id,
-                        new Employee(
-                            employee.Id,
-                            Size.Parse(employee.Size),
-                            new Email(employee.Email)),
-                        MerchStatus.Parse(merch.Status),
-                        MerchType.Parse(merch.Type),
-                        merch.CreatedAt,
-                        merch.IssuedAt);
-                },
-                parameters);
+            var result = await connection.QueryAsync<MerchDb>(query, parameters);
 
-            foreach (var merch in result)
+            var merches = result.Select(x => new Merch(
+                x.Id,
+                new Employee
+                {
+                    Person = new Person(x.EmployeeName),
+                    Email = new Email(x.EmployeeEmail)
+                },
+                new Manager
+                {
+                    Person = new Person(x.ManagerName),
+                    Email = new Email(x.ManagerEmail)
+                },
+                MerchStatus.Parse(x.Status),
+                MerchType.Parse(x.Type),
+                Size.Parse(x.Size),
+                x.CreatedAt,
+                x.IssuedAt));
+
+            foreach (var merch in merches)
             {
                 _changeTracker.Track(merch);
             }
 
-            return result;
+            return merches;
         }
 
         public async Task<IEnumerable<MerchItem>> GetMerchItems(long merchId, CancellationToken cancellationToken = default)

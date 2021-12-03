@@ -31,9 +31,11 @@ namespace MerchandiseService.API.Grpc.Services
             var createMerchCommand = new CreateMerchCommand
             {
                 MerchType = (HttpModels.MerchType)request.Type,
-                EmployeeId = request.EmployeeId,
                 Size = (HttpModels.Size)request.Size,
-                Email = request.Email
+                EmployeeName = request.EmployeeName,
+                EmployeeEmail = request.EmployeeEmail,
+                ManagerName = request.ManagerName,
+                ManagerEmail = request.ManagerEmail
             };
 
             try
@@ -45,7 +47,11 @@ namespace MerchandiseService.API.Grpc.Services
                     Id = result.Id,
                     Type = (MerchType)result.Type.Id,
                     Status = (MerchStatus)result.Status.Id,
-                    EmployeeId = result.Employee.Id,
+                    Size = (Size)result.Size.Id,
+                    EmployeeName = result.Employee.Person.FullName,
+                    EmployeeEmail = result.Employee.Email.Value,
+                    ManagerName = result.Manager.Person.FullName,
+                    ManagerEmail = result.Manager.Email.Value,
                     CreateAt = Timestamp.FromDateTime(result.CreatedAt.ToUniversalTime()),
                     IssuedAt = result.IssuedAt.HasValue ? Timestamp.FromDateTime(result.IssuedAt.Value.ToUniversalTime()) : null
                 };
@@ -63,7 +69,7 @@ namespace MerchandiseService.API.Grpc.Services
             }
             catch (MerchAlreadyExistException)
             {
-                throw new RpcException(new Status(StatusCode.AlreadyExists, $"Merch with type {request.Type} for employee {request.EmployeeId} has already been issued"));
+                throw new RpcException(new Status(StatusCode.AlreadyExists, $"Merch with type {request.Type} for employee {request.EmployeeEmail} has already been issued"));
             }
             catch (MerchPackNullException)
             {
@@ -95,7 +101,11 @@ namespace MerchandiseService.API.Grpc.Services
                 Id = result.Id,
                 Type = (MerchType)result.Type.Id,
                 Status = (MerchStatus)result.Status.Id,
-                EmployeeId = result.Employee.Id,
+                Size = (Size)result.Size.Id,
+                EmployeeName = result.Employee.Person.FullName,
+                EmployeeEmail = result.Employee.Email.Value,
+                ManagerName = result.Manager.Person.FullName,
+                ManagerEmail = result.Manager.Email.Value,
                 CreateAt = Timestamp.FromDateTime(result.CreatedAt.ToUniversalTime()),
                 IssuedAt = result.IssuedAt.HasValue ? Timestamp.FromDateTime(result.IssuedAt.Value.ToUniversalTime()) : null
             };

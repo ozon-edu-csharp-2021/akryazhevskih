@@ -28,17 +28,15 @@ namespace MerchandiseService.Infrastructure.Handlers.Supply
         {
             await _unitOfWork.StartTransactionAsync(cancellationToken);
 
-            var merchesInWork = new List<Merch>();
+            var merchesToWork = new List<Merch>();
 
             foreach (var supplyItem in command.SupplyItems)
             {
-                var availableQuantity = supplyItem.Quantity;
-
                 var merches = await _merchRepository.GetSupplyAwaitsMerches(supplyItem.Sku, cancellationToken);
 
                 foreach (var merch in merches.OrderByDescending(x => x.CreatedAt))
                 {
-                    if (merchesInWork.Contains(merch))
+                    if (merchesToWork.Contains(merch))
                     {
                         continue;
                     }
@@ -47,27 +45,18 @@ namespace MerchandiseService.Infrastructure.Handlers.Supply
 
                     var merchItem = merchItems.First(x => x.Sku.Equals(new Sku(supplyItem.Sku)));
 
-                    var neededQuantity = merchItem.IssuedQuantity == null ? merchItem.Quantity.Value : merchItem.Quantity.Value - merchItem.IssuedQuantity.Value;
+                    var quantity = merchItem.IssuedQuantity == null ? merchItem.Quantity.Value : merchItem.Quantity.Value - merchItem.IssuedQuantity.Value;
 
-                    var quantity = availableQuantity >= neededQuantity
-                        ? neededQuantity
-                        : availableQuantity;
+                    var merchToWork = await _merchRepository.GetAsync(merch.Id, cancellationToken);
+                    merchToWork.SetStatusInWork();
 
-                    merch.SetStatusInWork();
-                    merchesInWork.Add(merch);
-
-                    availableQuantity -= quantity;
-
-                    if (availableQuantity == 0)
-                    {
-                        break;
-                    }
+                    merchesToWork.Add(merchToWork);
                 }
             }
 
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
-            return merchesInWork;
+            return merchesToWork;
         }
     }
 }

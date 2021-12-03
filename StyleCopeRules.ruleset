@@ -9,6 +9,7 @@
 	<Rule Id="CS8603" Action="None" />
 	<Rule Id="CS8604" Action="None" />
 	<Rule Id="CS8618" Action="None" />
+	<Rule Id="CS8629" Action="None" />
 	<Rule Id="CS8765" Action="None" />
 	<Rule Id="CS8767" Action="None" />
   <Rule Id="SA1101" Action="None" />

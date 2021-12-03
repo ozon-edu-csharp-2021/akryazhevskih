@@ -15,23 +15,35 @@ namespace MerchandiseService.API.Models
         public MerchType Type { get; set; }
 
         /// <summary>
-        /// Идентификатор сотрудника
+        /// ФИО сотрудника
         /// </summary>
         [Required]
-        [Range(1, long.MaxValue)]
-        public long? EmployeeId { get; set; }
+        public string EmployeeName { get; init; }
+
+        /// <summary>
+        /// Email сотрудника
+        /// </summary>
+        [Required]
+        [EmailAddress]
+        public string EmployeeEmail { get; init; }
+
+        /// <summary>
+        /// ФИО менеджера
+        /// </summary>
+        [Required]
+        public string ManagerName { get; init; }
+
+        /// <summary>
+        /// Email менеджера
+        /// </summary>
+        [Required]
+        [EmailAddress]
+        public string ManagerEmail { get; init; }
 
         /// <summary>
         /// Размер
         /// </summary>
         [Required]
         public Size Size { get; set; }
-
-        /// <summary>
-        /// Email
-        /// </summary>
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
     }
 }

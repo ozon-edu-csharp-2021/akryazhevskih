@@ -39,9 +39,11 @@ namespace MerchandiseService.API.Controllers
             var createMerchCommand = new CreateMerchCommand
             {
                 MerchType = request.Type,
-                EmployeeId = request.EmployeeId.Value,
                 Size = request.Size,
-                Email = request.Email
+                EmployeeName = request.EmployeeName,
+                EmployeeEmail = request.EmployeeEmail,
+                ManagerName = request.ManagerName,
+                ManagerEmail = request.ManagerEmail
             };
 
             try
@@ -53,7 +55,11 @@ namespace MerchandiseService.API.Controllers
                     Id = merch.Id,
                     Type = (MerchType)merch.Type.Id,
                     Status = (MerchStatus)merch.Status.Id,
-                    EmployeeId = merch.Employee.Id,
+                    Size = (Size)merch.Size.Id,
+                    EmployeeName = merch.Employee.Person.FullName,
+                    EmployeeEmail = merch.Employee.Email.Value,
+                    ManagerName = merch.Manager.Person.FullName,
+                    ManagerEmail = merch.Manager.Email.Value,
                     CreateAt = merch.CreatedAt,
                     IssuedAt = merch.IssuedAt,
                     Items = merch.GetItems().Select(x => new MerchItem
@@ -104,7 +110,11 @@ namespace MerchandiseService.API.Controllers
                 Id = merch.Id,
                 Type = (MerchType)merch.Type.Id,
                 Status = (MerchStatus)merch.Status.Id,
-                EmployeeId = merch.Employee.Id,
+                Size = (Size)merch.Size.Id,
+                EmployeeName = merch.Employee.Person.FullName,
+                EmployeeEmail = merch.Employee.Email.Value,
+                ManagerName = merch.Manager.Person.FullName,
+                ManagerEmail = merch.Manager.Email.Value,
                 CreateAt = merch.CreatedAt,
                 IssuedAt = merch.IssuedAt,
                 Items = merch.GetItems().Select(x => new MerchItem
