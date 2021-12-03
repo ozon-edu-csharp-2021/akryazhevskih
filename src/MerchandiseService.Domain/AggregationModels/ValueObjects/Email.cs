@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MerchandiseService.Domain.Exceptions.ValueObjects;
 using MerchandiseService.Domain.Models;
 
@@ -12,16 +11,16 @@ namespace MerchandiseService.Domain.AggregationModels.ValueObjects
     {
         public Email(string email)
         {
-            if (String.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(email))
             {
                 throw new EmailException("Value cannot be empty");
             }
-            
+
             Value = email;
         }
-        
+
         public string Value { get; }
-        
+
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;

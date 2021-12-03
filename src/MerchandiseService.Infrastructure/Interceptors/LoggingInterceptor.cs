@@ -22,12 +22,12 @@ namespace MerchandiseService.Infrastructure.Interceptors
         {
             var requestJson = JsonSerializer.Serialize(request);
             _logger.LogInformation($"GrpcService request: {requestJson}");
-            
+
             var response = base.UnaryServerHandler(request, context, continuation);
 
             var responseJson = JsonSerializer.Serialize(response);
             _logger.LogInformation($"GrpcService response: {responseJson}");
-            
+
             return response;
         }
     }

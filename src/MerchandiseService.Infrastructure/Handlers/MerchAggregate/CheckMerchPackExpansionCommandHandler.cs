@@ -37,23 +37,23 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
             }
 
             var result = false;
-            
+
             var merchPack = await _merchPackRepository.GetAsync(merch.Type, merch.Employee.Size, cancellationToken);
-            if (merch is null)
+            if (merchPack is null)
             {
                 throw new MerchNullException($"Merch pack with type {merch.Type.Name} and size {merch.Employee.Size.Name} not found");
             }
 
-            var merchPackItems = merchPack.GetMerchPackItems();
-            
+            var merchPackItems = merchPack.GetItems();
+
             foreach (var item in merchPackItems)
             {
-                var existing = merch.GetMerchItems().FirstOrDefault(x => x.Sku.Equals(item.Sku));
+                var existing = merch.GetItems().FirstOrDefault(x => x.Sku.Equals(item.Sku));
 
                 if (existing is null)
                 {
-                    var merchItem = new MerchItem(item.Sku, item.Quantity, item.Size);
-                
+                    var merchItem = MerchItem.Create(merch.Id, item.Sku, item.Quantity, item.Size);
+
                     if (!merch.TryAddMerchItem(merchItem, out var reason))
                     {
                         _logger.LogWarning($"Failed to add item: {reason}");
@@ -62,7 +62,7 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
                     {
                         result = true;
                     }
-                    
+
                     continue;
                 }
 

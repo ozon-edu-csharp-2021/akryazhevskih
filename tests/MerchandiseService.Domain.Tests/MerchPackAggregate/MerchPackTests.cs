@@ -16,7 +16,8 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
             var type = MerchType.VeteranPack;
             var items = new List<MerchPackItem>
             {
-                new MerchPackItem(
+                MerchPackItem.Create(
+                    1,
                     new Sku(123456),
                     new Quantity(10),
                     Size.XL)
@@ -28,7 +29,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
 
             //Assert
             Assert.Equal(type, result.Type);
-            Assert.Equal(items, result.GetMerchPackItems());
+            Assert.Equal(items, result.GetItems());
             Assert.Equal(size, result.Size);
         }
         
@@ -39,7 +40,8 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
             var type = MerchType.VeteranPack;
             var items = new List<MerchPackItem>
             {
-                new MerchPackItem(
+                MerchPackItem.Create(
+                    1,
                     new Sku(123456),
                     new Quantity(10),
                     Size.XL)
@@ -50,7 +52,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
 
             //Assert
             Assert.Equal(type, result.Type);
-            Assert.Equal(items, result.GetMerchPackItems());
+            Assert.Equal(items, result.GetItems());
             Assert.Null(result.Size);
         }
         
@@ -61,7 +63,8 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
             var type = MerchType.VeteranPack;
             var items = new List<MerchPackItem>
             {
-                new MerchPackItem(
+                MerchPackItem.Create(
+                    1,
                     new Sku(123456),
                     new Quantity(10),
                     Size.XL)
@@ -73,7 +76,7 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
 
             //Assert
             Assert.Equal(type, result.Type);
-            Assert.Equal(items, result.GetMerchPackItems());
+            Assert.Equal(items, result.GetItems());
             Assert.Equal(size, result.Size);
         }
         
@@ -84,7 +87,8 @@ namespace MerchandiseService.Domain.Tests.MerchPackAggregate
             MerchType type = null;
             var items = new List<MerchPackItem>
             {
-                new MerchPackItem(
+                MerchPackItem.Create(
+                    1,
                     new Sku(123456),
                     new Quantity(10),
                     Size.XL)

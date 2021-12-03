@@ -3,6 +3,11 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <Nullable>enable</Nullable>
+      <CodeAnalysisRuleSet>../../StyleCopeRules.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
     
     <ItemGroup>
@@ -14,6 +19,11 @@
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
         <Protobuf Include="merch-api.proto" GrpServices="Both" />
+        <Protobuf Include="stock-api.proto" GrpServices="Both" />
     </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="../../.editorconfig" />
+  </ItemGroup>
 
 </Project>

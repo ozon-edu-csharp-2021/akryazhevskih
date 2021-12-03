@@ -1,7 +1,7 @@
 ﻿using System;
 using MerchandiseService.Infrastructure.Middlewares;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 
 namespace MerchandiseService.Infrastructure.StartupFilters
 {
@@ -15,12 +15,11 @@ namespace MerchandiseService.Infrastructure.StartupFilters
                 {
                     builder.UseMiddleware<LoggingMiddleware>();
                 });
-                
+
                 app.Map("/version", builder => builder.UseMiddleware<VersionMiddleware>());
                 app.Map("/ready", builder => builder.UseMiddleware<ReadyMiddleware>());
                 app.Map("/live", builder => builder.UseMiddleware<LiveMiddleware>());
-                
-                
+
                 next(app);
             };
         }

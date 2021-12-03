@@ -15,7 +15,7 @@ namespace MerchandiseService.Domain.AggregationModels.ValueObjects
             {
                 throw new SkuException("Code cannot be less than 1");
             }
-            
+
             Code = code;
         }
 
@@ -23,7 +23,7 @@ namespace MerchandiseService.Domain.AggregationModels.ValueObjects
         /// Код товара
         /// </summary>
         public long Code { get; }
-        
+
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Code;

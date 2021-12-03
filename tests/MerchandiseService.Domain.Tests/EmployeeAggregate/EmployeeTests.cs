@@ -16,7 +16,7 @@ namespace MerchandiseService.Domain.Tests.EmployeeAggregate
             var email = new Email("test999@test.ru");
 
             //Act
-            var result = new Employee(id, size, email);
+            var result = Employee.Create(id, size, email);
 
             //Assert
             Assert.Equal(id, result.Id);
@@ -35,7 +35,7 @@ namespace MerchandiseService.Domain.Tests.EmployeeAggregate
             //Act
 
             //Assert
-            Assert.Throws<EmployeeException>(() => new Employee(id, size, email));
+            Assert.Throws<EmployeeException>(() => Employee.Create(id, size, email));
         }
         
         [Fact]
@@ -49,7 +49,7 @@ namespace MerchandiseService.Domain.Tests.EmployeeAggregate
             //Act
 
             //Assert
-            Assert.Throws<EmployeeException>(() => new Employee(id, size, email));
+            Assert.Throws<EmployeeException>(() => Employee.Create(id, size, email));
         }
         
         [Fact]
@@ -63,7 +63,7 @@ namespace MerchandiseService.Domain.Tests.EmployeeAggregate
             //Act
 
             //Assert
-            Assert.Throws<EmployeeException>(() => new Employee(id, size, email));
+            Assert.Throws<EmployeeException>(() => Employee.Create(id, size, email));
         }
         
         [Fact]
@@ -77,7 +77,7 @@ namespace MerchandiseService.Domain.Tests.EmployeeAggregate
             //Act
 
             //Assert
-            Assert.Throws<EmployeeException>(() => new Employee(id, size, email));
+            Assert.Throws<EmployeeException>(() => Employee.Create(id, size, email));
         }
     }
 }

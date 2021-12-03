@@ -6,11 +6,25 @@ namespace MerchandiseService.Domain.Models
 {
     public class Entity
     {
-        int? _requestedHashCode;
+        private int? _requestedHashCode;
+        private List<INotification> _domainEvents;
+
         public virtual long Id { get; protected set; }
 
-        private List<INotification> _domainEvents;
         public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();
+
+        public static bool operator ==(Entity left, Entity right)
+        {
+            if (object.Equals(left, null))
+                return object.Equals(right, null) ? true : false;
+            else
+                return left.Equals(right);
+        }
+
+        public static bool operator !=(Entity left, Entity right)
+        {
+            return !(left == right);
+        }
 
         public void AddDomainEvent(INotification eventItem)
         {
@@ -30,7 +44,7 @@ namespace MerchandiseService.Domain.Models
 
         public bool IsTransient()
         {
-            return this.Id == default(Int64);
+            return this.Id == default(long);
         }
 
         public override bool Equals(object obj)
@@ -60,20 +74,9 @@ namespace MerchandiseService.Domain.Models
                 return _requestedHashCode.Value;
             }
             else
+            {
                 return base.GetHashCode();
-
-        }
-        public static bool operator ==(Entity left, Entity right)
-        {
-            if (Object.Equals(left, null))
-                return (Object.Equals(right, null)) ? true : false;
-            else
-                return left.Equals(right);
-        }
-
-        public static bool operator !=(Entity left, Entity right)
-        {
-            return !(left == right);
+            }
         }
     }
 }

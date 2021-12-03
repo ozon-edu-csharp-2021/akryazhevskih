@@ -11,12 +11,13 @@ namespace MerchandiseService.Domain.Models
             {
                 return false;
             }
+
             return ReferenceEquals(left, null) || left.Equals(right);
         }
 
         protected static bool NotEqualOperator(ValueObject left, ValueObject right)
         {
-            return !(EqualOperator(left, right));
+            return !EqualOperator(left, right);
         }
 
         protected abstract IEnumerable<object> GetEqualityComponents();

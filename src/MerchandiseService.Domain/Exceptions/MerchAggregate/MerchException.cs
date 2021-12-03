@@ -8,7 +8,7 @@ namespace MerchandiseService.Domain.Exceptions.MerchAggregate
             : base(message)
         {
         }
-        
+
         public MerchException(string message, Exception innerException)
             : base(message, innerException)
         {

@@ -1,14 +1,16 @@
 ﻿using MediatR;
+using MerchandiseService.Domain.AggregationModels.MerchAggregate;
 
 namespace MerchandiseService.Domain.Events
 {
     public class MerchStatusChangedToDoneDomainEvent : INotification
     {
-        public MerchStatusChangedToDoneDomainEvent(long merchId)
+        public MerchStatusChangedToDoneDomainEvent(
+            Merch merch)
         {
-            MerchId = merchId;
+            Merch = merch;
         }
-        
-        public long MerchId { get; }
+
+        public Merch Merch { get; }
     }
 }

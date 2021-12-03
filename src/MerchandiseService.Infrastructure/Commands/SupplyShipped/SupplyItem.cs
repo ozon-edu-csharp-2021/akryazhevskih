@@ -6,7 +6,7 @@
         /// Товарная позиция
         /// </summary>
         public long Sku { get; set; }
-        
+
         /// <summary>
         /// Количество
         /// </summary>

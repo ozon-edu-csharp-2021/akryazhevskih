@@ -2,39 +2,72 @@ syntax = "proto3";
 option csharp_namespace = "MerchandiseService.Grpc";
 package MerchandiseService.API;
 
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
 service MerchApiGrpc {
-  rpc RequestMerch (MerchRequest) returns (MerchResponse);
-  rpc GetMerchList (GetMerchListRequest) returns (GetMerchListResponse);
+  rpc RequestMerch (MerchRequest) returns (Merch);
+  rpc GetMerch (GetMerchRequest) returns (Merch);
 }
 
 message MerchRequest {
   MerchType type = 1;
   int64 employee_id = 2;
+  Size size = 3;
+  string email = 4;
 }
 
-message MerchResponse {
-  Merch merch = 1;
-}
-
-message GetMerchListRequest {
-  int64 employee_id = 1;
-}
-
-message GetMerchListResponse {
-  repeated Merch items = 1;
+message GetMerchRequest {
+  int64 merch_id = 1;
 }
 
 message Merch {
-  string id = 1;
+  int64 id = 1;
   MerchType type = 2;
-  int64 employee_id = 3;
+  MerchStatus status = 3;
+  int64 employee_id = 4;
+  google.protobuf.Timestamp create_at = 5;
+  google.protobuf.Timestamp issued_at = 6;
+  repeated MerchItem items = 7;
+}
+
+message MerchItem {
+  int64 sku = 1;
+  int32 quantity = 2;
+  google.protobuf.Int32Value issued_quantity = 3;
+  Size size = 4;
+  MerchItemStatus status = 5;
 }
 
 enum MerchType {
   MERCH_TYPE_UNSPECIFIED = 0;
-  MERCH_TYPE_WELCOME_PACK = 1;
-  MERCH_TYPE_CONFERENCE_LISTENER_PACK = 2;
-  MERCH_TYPE_CONFERENCE_SPEAKER_PACK = 3;
-  MERCH_TYPE_PROBATION_PERIOD_ENDING_PACK = 4;
-  MERCH_TYPE_VETERAN_PACK = 5;
+  MERCH_TYPE_WELCOME_PACK = 10;
+  MERCH_TYPE_CONFERENCE_LISTENER_PACK = 20;
+  MERCH_TYPE_CONFERENCE_SPEAKER_PACK = 30;
+  MERCH_TYPE_PROBATION_PERIOD_ENDING_PACK = 40;
+  MERCH_TYPE_VETERAN_PACK = 50;
+}
+
+enum MerchStatus {
+  MERCH_STATUS_UNSPECIFIED = 0;
+  MERCH_STATUS_NEW = 1;
+  MERCH_STATUS_IN_WORK = 2;
+  MERCH_STATUS_SUPPLY_AWAITS = 3;
+  MERCH_STATUS_DONE = 4;
+}
+
+enum MerchItemStatus {
+  MERCH_ITEM_STATUS_UNSPECIFIED = 0;
+  MERCH_ITEM_STATUS_AWAITS = 1;
+  MERCH_ITEM_STATUS_DONE = 2;
+}
+
+enum Size {
+  SIZE_UNSPECIFIED = 0;
+  SIZE_XS = 1;
+  SIZE_S = 2;
+  SIZE_M = 3;
+  SIZE_L = 4;
+  SIZE_XL = 5;
+  SIZE_XXL = 6;
 }

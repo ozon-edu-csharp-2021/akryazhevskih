@@ -1,4 +1,3 @@
-using System.Reflection;
 using MerchandiseService.API.Grpc.Services;
 using MerchandiseService.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -20,8 +19,8 @@ namespace MerchandiseService.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddInfrastructureRepositories();
-            services.AddInfrastructureServices();
+            services.AddInfrastructureRepositories(Configuration);
+            services.AddInfrastructureServices(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

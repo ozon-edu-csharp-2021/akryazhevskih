@@ -7,21 +7,6 @@ namespace MerchandiseService.Domain.Tests.MerchAggregate
     public class MerchTypeTests
     {
         [Fact]
-        public void CreateMerchType()
-        {
-            //Arrange
-            var id = 10;
-            var name = "StarterPack";
-
-            //Act
-            var result = new MerchType(id, name);
-
-            //Assert
-            Assert.Equal(id, result.Id);
-            Assert.Equal(name, result.Name);
-        }
-        
-        [Fact]
         public void ParseMerchType()
         {
             //Arrange

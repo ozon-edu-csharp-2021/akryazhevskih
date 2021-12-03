@@ -11,12 +11,12 @@ namespace MerchandiseService.Infrastructure.Commands.SupplyShipped
             SupplyId = supplyId;
             SupplyItems = supplyItems;
         }
-        
+
         /// <summary>
         /// Идентификаторв поставки
         /// </summary>
         public long SupplyId { get; }
-        
+
         /// <summary>
         /// Товары
         /// </summary>

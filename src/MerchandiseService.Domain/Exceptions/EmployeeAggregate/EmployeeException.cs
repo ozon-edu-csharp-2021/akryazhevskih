@@ -8,7 +8,7 @@ namespace MerchandiseService.Domain.Exceptions.EmployeeAggregate
             : base(message)
         {
         }
-        
+
         public EmployeeException(string message, Exception innerException)
             : base(message, innerException)
         {
