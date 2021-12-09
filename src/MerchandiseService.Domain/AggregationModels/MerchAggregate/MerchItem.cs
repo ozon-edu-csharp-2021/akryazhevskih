@@ -18,7 +18,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
             Quantity issuedQuantity,
             Size? size = null)
         {
-            SetId(id);
+            Id = id;
             MerchId = merchId;
             Sku = sku;
             Quantity = quantity;
@@ -121,11 +121,6 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
         public static MerchItem Create(long merchId, Sku sku, Quantity quantity, Size? size = null)
         {
             return new MerchItem(merchId, sku, quantity, size);
-        }
-
-        protected void SetId(long id)
-        {
-            Id = id;
         }
     }
 }

@@ -40,7 +40,7 @@ namespace MerchandiseService.Infrastructure.Handlers.DomainEvent
 
             _logger.LogInformation($"Merch with ID: {merchId} went to status {MerchStatus.InWork}");
 
-            var isDone = true;
+            var isDone = false;
             var merchItems = merch.GetItems().Where(x => x.Status.Equals(MerchItemStatus.Awaits));
 
             var skus = merchItems.Select(x => x.Sku.Code);
@@ -54,13 +54,11 @@ namespace MerchandiseService.Infrastructure.Handlers.DomainEvent
                 {
                     _logger.LogWarning($"Could not find position by sku {item.Sku.Code}");
 
-                    isDone = false;
                     continue;
                 }
 
                 if (available.Quantity == 0)
                 {
-                    isDone = false;
                     continue;
                 }
 
@@ -80,6 +78,9 @@ namespace MerchandiseService.Infrastructure.Handlers.DomainEvent
                 if (result)
                 {
                     item.SetIssuedQuantity(new Quantity(quantity));
+
+                    await _merchRepository.UpdateAsync(item, cancellationToken);
+                    isDone = true;
                 }
             }
 

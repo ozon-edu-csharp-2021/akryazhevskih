@@ -12,18 +12,28 @@ namespace MerchandiseService.Infrastructure.Commands.CreateMerch
         public MerchType MerchType { get; init; }
 
         /// <summary>
-        /// Идентификатор сотрудника
-        /// </summary>
-        public long EmployeeId { get; init; }
-
-        /// <summary>
         /// Размер
         /// </summary>
         public Size Size { get; init; }
 
         /// <summary>
-        /// Email
+        /// ФИО сотрудника
         /// </summary>
-        public string Email { get; init; }
+        public string EmployeeName { get; init; }
+
+        /// <summary>
+        /// Email сотрудника
+        /// </summary>
+        public string EmployeeEmail { get; init; }
+
+        /// <summary>
+        /// ФИО менеджера
+        /// </summary>
+        public string ManagerName { get; init; }
+
+        /// <summary>
+        /// Email менеджера
+        /// </summary>
+        public string ManagerEmail { get; init; }
     }
 }

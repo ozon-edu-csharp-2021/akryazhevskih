@@ -38,10 +38,10 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
 
             var result = false;
 
-            var merchPack = await _merchPackRepository.GetAsync(merch.Type, merch.Employee.Size, cancellationToken);
+            var merchPack = await _merchPackRepository.GetAsync(merch.Type, merch.Size, cancellationToken);
             if (merchPack is null)
             {
-                throw new MerchNullException($"Merch pack with type {merch.Type.Name} and size {merch.Employee.Size.Name} not found");
+                throw new MerchNullException($"Merch pack with type {merch.Type.Name} and size {merch.Size.Name} not found");
             }
 
             var merchPackItems = merchPack.GetItems();
@@ -60,6 +60,7 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
                     }
                     else
                     {
+                        await _merchRepository.CreateAsync(merchItem, cancellationToken);
                         result = true;
                     }
 
@@ -70,6 +71,7 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
                 {
                     existing.SetQuantity(new Quantity(item.Quantity.Value));
 
+                    await _merchRepository.UpdateAsync(existing, cancellationToken);
                     result = true;
                 }
             }

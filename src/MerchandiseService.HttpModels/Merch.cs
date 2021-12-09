@@ -24,9 +24,29 @@ namespace MerchandiseService.HttpModels
         public MerchStatus Status { get; set; }
 
         /// <summary>
-        /// Идентификатор сотрудника
+        /// Размер мерча
         /// </summary>
-        public long EmployeeId { get; set; }
+        public Size Size { get; set; }
+
+        /// <summary>
+        /// ФИО сотрудника
+        /// </summary>
+        public string EmployeeName { get; set; }
+
+        /// <summary>
+        /// Email сотрудника
+        /// </summary>
+        public string EmployeeEmail { get; set; }
+
+        /// <summary>
+        /// ФИО менеджера
+        /// </summary>
+        public string ManagerName { get; set; }
+
+        /// <summary>
+        /// Email менеджера
+        /// </summary>
+        public string ManagerEmail { get; set; }
 
         /// <summary>
         /// Дата создания запроса

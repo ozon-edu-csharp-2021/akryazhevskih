@@ -12,9 +12,11 @@ service MerchApiGrpc {
 
 message MerchRequest {
   MerchType type = 1;
-  int64 employee_id = 2;
-  Size size = 3;
-  string email = 4;
+  string employee_name = 2;
+  string employee_email = 3;
+  string manager_name = 4;
+  string manager_email = 5;
+  Size size = 6;
 }
 
 message GetMerchRequest {
@@ -25,10 +27,14 @@ message Merch {
   int64 id = 1;
   MerchType type = 2;
   MerchStatus status = 3;
-  int64 employee_id = 4;
-  google.protobuf.Timestamp create_at = 5;
-  google.protobuf.Timestamp issued_at = 6;
-  repeated MerchItem items = 7;
+  Size size = 4;
+  string employee_name = 5;
+  string employee_email = 6;
+  string manager_name = 7;
+  string manager_email = 8;
+  google.protobuf.Timestamp create_at = 9;
+  google.protobuf.Timestamp issued_at = 10;
+  repeated MerchItem items = 11;
 }
 
 message MerchItem {

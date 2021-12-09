@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
 using MerchandiseService.Domain.AggregationModels.MerchAggregate;
 using MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using MerchandiseService.Domain.AggregationModels.ValueObjects;
@@ -20,7 +19,6 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
     {
         private readonly IMerchRepository _merchRepository;
         private readonly IMerchPackRepository _merchPackRepository;
-        private readonly IEmployeeRepository _employeeRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
@@ -28,14 +26,12 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
         public CreateMerchCommandHandler(
             IMerchRepository merchRepository,
             IMerchPackRepository merchPackRepository,
-            IEmployeeRepository employeeRepository,
             IUnitOfWork unitOfWork,
             IMediator mediator,
             ILogger<CreateMerchCommandHandler> logger)
         {
             _merchRepository = merchRepository ?? throw new ArgumentNullException(nameof(merchRepository), "Cannot be null");
             _merchPackRepository = merchPackRepository ?? throw new ArgumentNullException(nameof(merchPackRepository), "Cannot be null");
-            _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository), "Cannot be null");
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork), "Cannot be null");
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator), "Cannot be null");
             _logger = logger ?? throw new ArgumentNullException(nameof(logger), "Cannot be null");
@@ -55,7 +51,7 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
 
             await _unitOfWork.StartTransactionAsync(cancellationToken);
 
-            var existingMerch = await _merchRepository.GetAsync(command.EmployeeId, merchType, cancellationToken);
+            var existingMerch = await _merchRepository.GetAsync(command.EmployeeEmail, merchType, cancellationToken);
             if (existingMerch is not null)
             {
                 var checkMerchPackExpansionCommand = new CheckMerchPackExpansionCommand(existingMerch.Id);
@@ -74,7 +70,7 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
                     _logger.LogError(ex, "Error when check merch pack expansion");
                 }
 
-                throw new MerchAlreadyExistException($"Merch with type equal {merchType.Name} for employee {command.EmployeeId} already exist");
+                throw new MerchAlreadyExistException($"Merch with type equal {merchType.Name} for employee {command.EmployeeEmail} already exist");
             }
 
             var merchPack = await _merchPackRepository.GetAsync(merchType, size, cancellationToken);
@@ -85,19 +81,19 @@ namespace MerchandiseService.Infrastructure.Handlers.MerchAggregate
 
             var merchPackItems = merchPack.GetItems();
 
-            var employee = await _employeeRepository.GetAsync(command.EmployeeId);
-            if (employee is null)
+            var employee = new Employee
             {
-                employee = Employee.Create(command.EmployeeId, size, new Email(command.Email));
-                await _employeeRepository.CreateAsync(employee, cancellationToken);
-            }
-            else
-            {
-                employee.Update(size, new Email(command.Email));
-                await _employeeRepository.UpdateAsync(employee, cancellationToken);
-            }
+                Person = new Person(command.EmployeeName),
+                Email = new Email(command.EmployeeEmail)
+            };
 
-            var merch = Merch.Create(employee, merchType);
+            var manager = new Manager
+            {
+                Person = new Person(command.ManagerName),
+                Email = new Email(command.ManagerEmail)
+            };
+
+            var merch = Merch.Create(employee, manager, merchType, size);
 
             merch = await _merchRepository.CreateAsync(merch, cancellationToken);
 

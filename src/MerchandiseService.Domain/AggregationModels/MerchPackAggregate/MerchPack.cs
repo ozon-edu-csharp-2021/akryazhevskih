@@ -18,7 +18,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
             string description,
             Size? size = null)
         {
-            SetId(id);
+            Id = id;
             Type = type;
             Size = size;
             Description = description;
@@ -89,11 +89,6 @@ namespace MerchandiseService.Domain.AggregationModels.MerchPackAggregate
         public MerchPack Create(MerchType type, string description, Size? size = null)
         {
             return new MerchPack(type, description, size);
-        }
-
-        protected void SetId(long id)
-        {
-            Id = id;
         }
     }
 }

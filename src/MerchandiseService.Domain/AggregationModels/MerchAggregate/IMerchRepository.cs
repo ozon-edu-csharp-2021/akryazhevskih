@@ -9,7 +9,7 @@ namespace MerchandiseService.Domain.AggregationModels.MerchAggregate
     {
         Task<Merch> GetAsync(long id, CancellationToken cancellationToken = default);
 
-        Task<Merch> GetAsync(long employeeId, MerchType type, CancellationToken cancellationToken = default);
+        Task<Merch> GetAsync(string employeeEmail, MerchType type, CancellationToken cancellationToken = default);
 
         Task<IEnumerable<Merch>> GetSupplyAwaitsMerches(long sku, CancellationToken cancellationToken = default);
 

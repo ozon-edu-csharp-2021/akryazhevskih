@@ -1,11 +1,13 @@
 ﻿using System.Reflection;
 using MediatR;
-using MerchandiseService.Domain.AggregationModels.EmployeeAggregate;
 using MerchandiseService.Domain.AggregationModels.MerchAggregate;
 using MerchandiseService.Domain.AggregationModels.MerchPackAggregate;
 using MerchandiseService.Domain.Contracts;
 using MerchandiseService.Infrastructure.Configuration;
-using MerchandiseService.Infrastructure.Repositories.Implementation.EmployeeAggregate;
+using MerchandiseService.Infrastructure.Configuration.KafkaConfiguration;
+using MerchandiseService.Infrastructure.HostedServices;
+using MerchandiseService.Infrastructure.MessageBroker;
+using MerchandiseService.Infrastructure.MessageBroker.Implementation;
 using MerchandiseService.Infrastructure.Repositories.Implementation.MerchRepository;
 using MerchandiseService.Infrastructure.Repositories.Infrastructure.Implementation;
 using MerchandiseService.Infrastructure.Repositories.Infrastructure.Interfaces;
@@ -24,7 +26,7 @@ namespace MerchandiseService.Infrastructure.Extensions
         /// </summary>
         /// <param name="services">Объект IServiceCollection</param>
         /// <returns>Объект <see cref="IServiceCollection"/></returns>
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<StockApiOptions>(configuration.GetSection(nameof(StockApiOptions)));
 
@@ -40,7 +42,7 @@ namespace MerchandiseService.Infrastructure.Extensions
         /// </summary>
         /// <param name="services">Объект IServiceCollection</param>
         /// <returns>Объект <see cref="IServiceCollection"/></returns>
-        public static IServiceCollection AddInfrastructureRepositories(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddRepositories(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<DatabaseConnectionOptions>(configuration.GetSection(nameof(DatabaseConnectionOptions)));
 
@@ -50,7 +52,23 @@ namespace MerchandiseService.Infrastructure.Extensions
 
             services.AddScoped<IMerchRepository, MerchRepository>();
             services.AddScoped<IMerchPackRepository, MerchPackRepository>();
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddHostedServices(this IServiceCollection services)
+        {
+            services.AddHostedService<SupplyShippedEventHostedService>();
+            services.AddHostedService<IssueMerchEventHostedService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddKafka(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<KafkaOptions>(configuration.GetSection(nameof(KafkaOptions)));
+
+            services.AddSingleton<IMerchProducer, MerchProducer>();
 
             return services;
         }
